@@ -35,10 +35,13 @@ public class UserController {
 		pic.setPicData(null);
 		return pic;
 	}
-	
 	@GetMapping(path = "users/photos/{userId}")
 	public List<Photos> getUserPhotos(@PathVariable(name = "userId") int userId){
 		return userService.getUserPhotos(userId);		
+	}
+	@GetMapping(path = "users/home/photos/{userId}")
+	public List<Photos> getHomeScreenPhotos(@PathVariable(name = "userId") int userId){
+		return userService.getHomeScreenPhotos(userId);		
 	}
 	
 	@GetMapping(path = "users/connections/followers/{userId}")
@@ -50,7 +53,7 @@ public class UserController {
 		return userService.getUserFolloiwngs(userId);		
 	}
 	
-	@GetMapping(path="users/connections/")
+	@GetMapping(path="users/request/respond")
 	public boolean acceptOrRejectRequest(@RequestParam(name = "userId") int userId,
 			@RequestParam(name = "requestId") int requestId,
 			@RequestParam(name = "response") char response) throws Exception {
