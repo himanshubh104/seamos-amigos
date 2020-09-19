@@ -23,6 +23,7 @@ public class Photos {
 	private int photoId;
 	private String url;
 	private String caption;
+	private int likes;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfUpload;
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -64,7 +65,12 @@ public class Photos {
 	public void setUsers(List<UserEntity> users) {
 		this.users = users;
 	}
-	
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 	
 	
 }

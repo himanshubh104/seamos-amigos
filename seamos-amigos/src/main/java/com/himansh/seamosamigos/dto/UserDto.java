@@ -54,7 +54,7 @@ public class UserDto {
 		ud.setFirstName(ue.getFirstName());
 		ud.setLastName(ue.getLastName());
 		ud.setEmail(ue.getEmail());
-		ud.setPassword(ue.getPassword());
+//		ud.setPassword(ue.getPassword());
 		return ud;
 	}
 }

@@ -43,7 +43,7 @@ public class UserService {
 		return UserDto.generateDto(userRepository.saveAndFlush(user));	
 	}
 	
-	public UserEntity getUserById(int userId) {
+	private UserEntity getUserById(int userId) {
 		return userRepository.findById(userId).get();
 	}
 	
@@ -51,9 +51,33 @@ public class UserService {
 		return infoRepository.findById(userId).get();
 	}
 	
+	public List<UserDto> getUserFollowers(int userId){
+		UserEntity ue=getUserById(userId);
+		return ue.getConnections().stream().map(con->{
+			return UserDto.generateDto(con.getUser2());
+		}).collect(Collectors.toList());
+	}
+	
+	public List<UserDto> getUserFolloiwngs(int userId){
+		return userRepository.getFollowings(userId).stream().map(u->{
+			return UserDto.generateDto(u);
+		}).collect(Collectors.toList());
+	}
+	
+	/*-------------------------------------------Photos--------------------------------------------*/
+	
+	
+	//Get Profile photos
 	public List<Photos> getUserPhotos(int userid){
+		return photoRepository.getAllProfilePotos(userid);	
+	}
+	
+	//Get photos in Home
+	public List<Photos> getHomeScreenPhotos(int userid){
 		return photoRepository.getAllPotos(userid);	
 	}
+	
+	//Upload a picture
 	public PhotoDto addUserPhoto(PhotoDto photo) throws Exception{
 		String uri=utility.saveUploadedFile(photo.getPicData(),photo.getUserId());
 		if (uri!=null) {
@@ -65,13 +89,11 @@ public class UserService {
 		}
 		return photo;
 	}
+		
 	
-	public List<UserDto> getUserFriends(int userId){
-		UserEntity ue=getUserById(userId);
-		return ue.getConnections().stream().map(con->{
-			return UserDto.generateDto(con.getUser2());
-		}).collect(Collectors.toList());
-	}
+	/*-------------------------------------------------Photos------------------------------------------*/
+	/*------------------------------------------------Requests----------------------------------------------*/
+	
 	
 	//Method for Follow Requests
 	 public boolean acceptOrRejectRequest(int userId, int requestId,char response) throws Exception {
@@ -88,8 +110,8 @@ public class UserService {
 		switch (response) {
 		case 'A':
 			Connections con=new Connections();
-			con.setUser1(request.getUser1());
-			con.setUser2(request.getUser2());
+			con.setUser1(request.getRequestedUser());
+			con.setUser2(request.getRequestingUser());
 			boolean result=conRepository.saveAndFlush(con)!=null;
 			reqRepository.delete(request);
 			return result;
@@ -101,19 +123,22 @@ public class UserService {
 		}	 
 	 }
 	 
-	 public FollowRequests createRequest(int userId1,int userId2) throws Exception {
-		 if (reqRepository.checkIfRequestAlreadyExists(userId1, userId2)!=null) {
+	 public FollowRequests createRequest(int requestedUser,int requestingUser) throws Exception {
+		 if (reqRepository.checkIfRequestAlreadyExists(requestedUser, requestingUser)!=null) {
 				throw new Exception("Already Requested");
 			}
-		 if (conRepository.checkConnection(userId1, userId2)!=null) {
+		 if (conRepository.checkConnection(requestedUser, requestingUser)!=null) {
 			throw new Exception("Already Following");
 		}
-		 if(userId1==userId2) {
+		 if(requestedUser==requestingUser) {
 			 throw new Exception("Can't follow yourself");
 		 }
 		 FollowRequests request=new FollowRequests();
-		 request.setUser1(getUserById(userId1));
-		 request.setUser2(getUserById(userId2));
+		 request.setRequestedUser(getUserById(requestedUser));
+		 request.setRequestingUser(getUserById(requestingUser));
 		 return reqRepository.saveAndFlush(request);
 	 }
+	 
+	 
+	 /*------------------------------------------------Requests----------------------------------------------*/
 }

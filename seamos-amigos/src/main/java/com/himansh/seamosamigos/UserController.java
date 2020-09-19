@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
@@ -40,22 +41,26 @@ public class UserController {
 		return userService.getUserPhotos(userId);		
 	}
 	
-	@GetMapping(path = "users/friends/{userId}")
-	public List<UserDto> getUserFriends(@PathVariable(name = "userId") int userId){
-		return userService.getUserFriends(userId);		
+	@GetMapping(path = "users/connections/followers/{userId}")
+	public List<UserDto> getUserFollowers(@PathVariable(name = "userId") int userId){
+		return userService.getUserFollowers(userId);		
+	}
+	@GetMapping(path = "users/connections/followings/{userId}")
+	public List<UserDto> getUserFollowings(@PathVariable(name = "userId") int userId){
+		return userService.getUserFolloiwngs(userId);		
 	}
 	
-	@GetMapping(path="users/connections/{userId}/{requestId}/{response}/")
-	public boolean acceptOrRejectRequest(@PathVariable(name = "userId") int userId,
-			@PathVariable(name = "requestId") int requestId,
-			@PathVariable(name = "response") char response) throws Exception {
+	@GetMapping(path="users/connections/")
+	public boolean acceptOrRejectRequest(@RequestParam(name = "userId") int userId,
+			@RequestParam(name = "requestId") int requestId,
+			@RequestParam(name = "response") char response) throws Exception {
 		return userService.acceptOrRejectRequest(userId, requestId, response);
 	}
 	
-	@GetMapping(path="users/request/create/{userId1}/{userId2}/")
-	 public FollowRequests createRequest(@PathVariable(name = "userId1")int userId1,
-			 @PathVariable(name = "userId2")int userId2) throws Exception {
-		return userService.createRequest(userId1, userId2);
+	@GetMapping(path="users/request/create/")
+	 public FollowRequests createRequest(@RequestParam(name = "requestedUser")int requestedUser,
+			 @RequestParam(name = "requestingUser")int requestingUser) throws Exception {
+		return userService.createRequest(requestedUser, requestingUser);
 	 }
 
 }

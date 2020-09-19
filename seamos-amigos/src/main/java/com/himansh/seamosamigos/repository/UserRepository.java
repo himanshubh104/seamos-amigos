@@ -18,5 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 //	public List<UserEntity> getConnectionList(@Param("userid") int userid);
 	
 	@Query("select c.user2 from connections c where c.user1.userId=:userid")
-	public List<UserEntity> getConnectionList(@Param("userid") int userid);
+	public List<UserEntity> getFollowers(@Param("userid") int userid);
+	
+	@Query("select c.user1 from connections c where c.user2.userId=:userid")
+	public List<UserEntity> getFollowings(@Param("userid") int userid);
 }

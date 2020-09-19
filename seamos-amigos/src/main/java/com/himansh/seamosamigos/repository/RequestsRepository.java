@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import com.himansh.seamosamigos.entity.FollowRequests;
 
 public interface RequestsRepository extends JpaRepository<FollowRequests, Integer> {
-	@Query("from follow_request req where req.user1.userId=:user1 and req.user2.userId=:user2")
-	public FollowRequests checkIfRequestAlreadyExists(@Param("user1") int user1,@Param("user2") int user2);
+	@Query("from follow_request req where req.requestedUser.userId=:requestedUser and req.requestingUser.userId=:requestingUser")
+	public FollowRequests checkIfRequestAlreadyExists(@Param("requestedUser") int requestedUser,@Param("requestingUser") int requestingUser);
 
 }

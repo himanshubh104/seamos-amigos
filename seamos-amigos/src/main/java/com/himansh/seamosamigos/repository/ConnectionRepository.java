@@ -9,4 +9,7 @@ import com.himansh.seamosamigos.entity.Connections;
 public interface ConnectionRepository extends JpaRepository<Connections, Integer> {
 	@Query("from connections c where c.user1.userId=:user1 and c.user2.userId=:user2")
 	public Connections checkConnection(@Param("user1") int user1,@Param("user2") int user2);
+	
+//	@Query("from connections c where c.user1.userId=:user1 and c.user2.userId=:user2")
+//	public Connections getFollowings();
 }

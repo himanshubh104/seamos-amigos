@@ -30,7 +30,7 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user1")
 	private List<Connections> connections;
 	
-	@OneToMany(mappedBy = "user1")
+	@OneToMany(mappedBy = "requestedUser")
 	private List<FollowRequests> requests;
 	
 	@JsonBackReference
