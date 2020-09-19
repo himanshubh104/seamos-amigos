@@ -2,6 +2,7 @@ package com.himansh.seamosamigos.service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,5 +56,11 @@ public class UserService {
 			return PhotoDto.generateDto(photoRepository.save(photoEntity));	
 		}
 		return photo;
+	}
+	
+	public List<UserDto> getUserFriends(int userId){
+		return userRepository.getConnectionList(userId).stream().map(u->{
+			return UserDto.generateDto(u);
+		}).collect(Collectors.toList());
 	}
 }

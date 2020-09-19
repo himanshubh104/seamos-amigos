@@ -5,7 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity(name="connection")
 public class Connection {
 	@Id
 	@GeneratedValue
@@ -19,6 +21,7 @@ public class Connection {
 	public void setConnectionId(int connectionId) {
 		this.connectionId = connectionId;
 	}
+	@JsonBackReference
 	public UserEntity getUser1() {
 		return user1;
 	}

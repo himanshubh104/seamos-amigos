@@ -30,7 +30,13 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user1")
 	private List<Connection> connections;
 	
-	
+	@JsonBackReference
+	public List<Connection> getConnections() {
+		return connections;
+	}
+	public void setConnections(List<Connection> connections) {
+		this.connections = connections;
+	}
 	@JsonBackReference
 	public List<Photos> getPhotos() {
 		return photos;

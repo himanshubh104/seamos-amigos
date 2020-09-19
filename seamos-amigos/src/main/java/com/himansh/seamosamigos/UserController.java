@@ -38,5 +38,10 @@ public class UserController {
 	public List<Photos> getUserPhotos(@PathVariable(name = "userId") int userId){
 		return userService.getUserPhotos(userId);		
 	}
+	
+	@GetMapping(path = "users/friends/{userId}")
+	public List<UserDto> getUserFriends(@PathVariable(name = "userId") int userId){
+		return userService.getUserFriends(userId);		
+	}
 
 }
