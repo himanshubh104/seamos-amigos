@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class Utilities {
 	
-	private final String UPLOADED_FOLDER= "C:\\Users\\Himansh\\Documents\\SocialMediaSpringSite\\stored-images\\";
+	private final String UPLOADED_FOLDER= "C:\\Users\\Himansh\\Documents\\GIT_Repo\\seamos-amigos\\stored-images\\";
 	
 	public Date stringToDate(String strDate)throws Exception{
 		Date date= new SimpleDateFormat("dd-MMM-yyyy").parse(strDate);
@@ -33,7 +33,7 @@ public class Utilities {
 	public String saveUploadedFile(MultipartFile file,int userId) throws Exception {
 	    if (!file.isEmpty()) {
 	        byte[] bytes = file.getBytes();
-	        Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+	        Path path = Paths.get(UPLOADED_FOLDER + "img_"+userId+"-"+file.getOriginalFilename());
 //	        Path path = Paths.get(UPLOADED_FOLDER + "img_"+userId+"-"+dateToString(Calendar.getInstance().getTime())+file.getContentType());
 	        return Files.write(path, bytes).toUri().getPath();
 	    }

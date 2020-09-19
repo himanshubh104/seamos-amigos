@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.UserDto;
+import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.entity.Photos;
 import com.himansh.seamosamigos.service.UserService;
 
@@ -43,5 +44,18 @@ public class UserController {
 	public List<UserDto> getUserFriends(@PathVariable(name = "userId") int userId){
 		return userService.getUserFriends(userId);		
 	}
+	
+	@GetMapping(path="users/connections/{userId}/{requestId}/{response}/")
+	public boolean acceptOrRejectRequest(@PathVariable(name = "userId") int userId,
+			@PathVariable(name = "requestId") int requestId,
+			@PathVariable(name = "response") char response) throws Exception {
+		return userService.acceptOrRejectRequest(userId, requestId, response);
+	}
+	
+	@GetMapping(path="users/request/create/{userId1}/{userId2}/")
+	 public FollowRequests createRequest(@PathVariable(name = "userId1")int userId1,
+			 @PathVariable(name = "userId2")int userId2) throws Exception {
+		return userService.createRequest(userId1, userId2);
+	 }
 
 }

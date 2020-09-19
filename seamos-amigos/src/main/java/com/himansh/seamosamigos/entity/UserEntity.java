@@ -28,13 +28,23 @@ public class UserEntity {
 	private List<Photos> photos;
 	
 	@OneToMany(mappedBy = "user1")
-	private List<Connection> connections;
+	private List<Connections> connections;
+	
+	@OneToMany(mappedBy = "user1")
+	private List<FollowRequests> requests;
 	
 	@JsonBackReference
-	public List<Connection> getConnections() {
+	public List<FollowRequests> getRequests() {
+		return requests;
+	}
+	public void setRequests(List<FollowRequests> requests) {
+		this.requests = requests;
+	}
+	@JsonBackReference
+	public List<Connections> getConnections() {
 		return connections;
 	}
-	public void setConnections(List<Connection> connections) {
+	public void setConnections(List<Connections> connections) {
 		this.connections = connections;
 	}
 	@JsonBackReference
