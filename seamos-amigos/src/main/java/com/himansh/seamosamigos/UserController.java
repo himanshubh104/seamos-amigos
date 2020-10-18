@@ -1,8 +1,15 @@
 package com.himansh.seamosamigos;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,36 +19,75 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.service.PhotoService;
+import com.himansh.seamosamigos.service.RequestService;
 import com.himansh.seamosamigos.service.UserService;
+import com.himansh.seamosamigos.utility.JwtUtility;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private PhotoService photoService;
+	@Autowired
+	private RequestService requestService;
+	@Autowired
+	private JwtUtility jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    private int userId=-1;
 	
-	@PostMapping(path = "users",consumes = "application/JSON")
+    @ModelAttribute
+    public void fetchUser() {
+    	Object principal =SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	if (principal instanceof UserPrincipal) {
+    		userId = ((UserPrincipal)principal).getUserId();
+    		System.out.println("User is: "+((UserPrincipal)principal).getUsername());
+    	} 
+    }
+    
+	//Register A User
+	@PostMapping(path = "users/register",consumes = "application/JSON")
 	public UserDto addUser(@RequestBody UserDto user) {
-		return userService.addUser(user.generateEntity());	
+		return userService.addUser(user.generateEntity(),user.getRoles());	
+	}
+	
+	//Login end point
+	@PostMapping(path = "users/login",consumes = "application/JSON")
+	public Map<String,Object> loginUser(@RequestBody UserDto user) {
+		try {
+    		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+		} catch (BadCredentialsException e) {
+			throw new UsernameNotFoundException("Incorrect Username or Password",e);
+		}
+		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
+		String jwt=jwtUtil.generateToken(userPrincipal);
+		 Map<String,Object> map= new HashMap<>();
+	        map.put("authenticated",true);
+	        map.put("jwt",jwt);
+		return map;
 	}
 	
 	@PostMapping(path = "users/photos")
 	public PhotoDto addUserPhoto(@ModelAttribute PhotoDto photoDto) throws Exception {
-		PhotoDto pic=userService.addUserPhoto(photoDto);
+		PhotoDto pic=photoService.addUserPhoto(photoDto);
 		pic.setPicData(null);
 		return pic;
 	}
-	@GetMapping(path = "users/photos/{userId}")
-	public List<Photos> getUserPhotos(@PathVariable(name = "userId") int userId){
-		return userService.getUserPhotos(userId);		
+	@GetMapping(path = "users/photos")
+	public List<Photos> getUserPhotos(){
+		return photoService.getUserPhotos(userId);		
 	}
 	@GetMapping(path = "users/home/photos/{userId}")
 	public List<Photos> getHomeScreenPhotos(@PathVariable(name = "userId") int userId){
-		return userService.getHomeScreenPhotos(userId);		
+		return photoService.getHomeScreenPhotos(userId);		
 	}
 	
 	@GetMapping(path = "users/connections/followers/{userId}")
@@ -57,13 +103,13 @@ public class UserController {
 	public boolean acceptOrRejectRequest(@RequestParam(name = "userId") int userId,
 			@RequestParam(name = "requestId") int requestId,
 			@RequestParam(name = "response") char response) throws Exception {
-		return userService.acceptOrRejectRequest(userId, requestId, response);
+		return requestService.acceptOrRejectRequest(userId, requestId, response);
 	}
 	
 	@GetMapping(path="users/request/create/")
 	 public FollowRequests createRequest(@RequestParam(name = "requestedUser")int requestedUser,
 			 @RequestParam(name = "requestingUser")int requestingUser) throws Exception {
-		return userService.createRequest(requestedUser, requestingUser);
+		return requestService.createRequest(requestedUser, requestingUser);
 	 }
 
 }
