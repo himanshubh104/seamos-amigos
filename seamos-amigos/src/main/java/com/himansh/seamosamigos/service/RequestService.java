@@ -1,7 +1,10 @@
 package com.himansh.seamosamigos.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.himansh.seamosamigos.entity.Connections;
 import com.himansh.seamosamigos.entity.FollowRequests;
@@ -68,4 +71,9 @@ public class RequestService {
 		 request.setRequestingUser(getUserById(requestingUser));
 		 return reqRepository.saveAndFlush(request);
 	 }
+	 
+	@GetMapping(path="users/request")
+	public List<FollowRequests> getAllRequests(int requestedUser){
+		return reqRepository.getAllRequests(requestedUser);
+	}
 }
