@@ -1,4 +1,4 @@
-package com.himansh.seamosamigos;
+package com.himansh.seamosamigos.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,11 +49,14 @@ public class UserController {
 	
     @ModelAttribute
     public void fetchUser() {
-    	Object principal =SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	if (principal instanceof UserPrincipal) {
-    		userId = ((UserPrincipal)principal).getUserId();
-    		System.out.println("User is: "+((UserPrincipal)principal).getUsername());
-    	} 
+    	Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+    	if (auth !=null) {
+    		Object principal =auth.getPrincipal();
+        	if (principal instanceof UserPrincipal) {
+        		userId = ((UserPrincipal)principal).getUserId();
+        		System.out.println("User is: "+((UserPrincipal)principal).getUsername());
+        	} 
+		}
     }
     
 	//Register A User
