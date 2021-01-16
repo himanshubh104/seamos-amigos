@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### STS ###
+/stored-images
 .apt_generated
 .classpath
 .factorypath
