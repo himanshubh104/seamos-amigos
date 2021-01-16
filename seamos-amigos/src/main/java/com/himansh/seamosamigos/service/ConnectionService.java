@@ -1,11 +1,13 @@
 package com.himansh.seamosamigos.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.Connections;
 import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.entity.UserEntity;
@@ -14,7 +16,7 @@ import com.himansh.seamosamigos.repository.RequestsRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
 
 @Service
-public class RequestService {
+public class ConnectionService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -26,6 +28,19 @@ public class RequestService {
 	
 	private UserEntity getUserById(int userId) {
 		return userRepository.findById(userId).get();
+	}
+	
+	public List<UserDto> getUserFollowers(int userId){
+		UserEntity ue=getUserById(userId);
+		return ue.getConnections().stream().map(con->{
+			return UserDto.generateDto(con.getUser2());
+		}).collect(Collectors.toList());
+	}
+	
+	public List<UserDto> getUserFolloiwngs(int userId){
+		return userRepository.getFollowings(userId).stream().map(u->{
+			return UserDto.generateDto(u);
+		}).collect(Collectors.toList());
 	}
 	
 	//Method for Follow Requests
