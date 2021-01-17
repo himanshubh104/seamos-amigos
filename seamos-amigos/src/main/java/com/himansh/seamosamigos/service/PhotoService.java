@@ -31,18 +31,18 @@ public class PhotoService {
 	
 	//Get photos in Feeds
 	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){
-		Pageable pageable= PageRequest.of(0, 1);
+		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.findWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
 	}
 	
 	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
-		Pageable pageable= PageRequest.of(0, 1);
+		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.findWebModels(photoRepository.getAllPotos(userId, pageable));
 	}
 	
 	//Get photos in Feeds
 	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{
-		Pageable pageable= PageRequest.of(0, 1);
+		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.findWebModels(
 				photoRepository.getAllPotosByTimestamp(userid, utility.stringToTimeStamp(timestamp), pageable));	
 	}
