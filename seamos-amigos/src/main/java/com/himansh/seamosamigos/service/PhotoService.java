@@ -4,9 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
+import com.himansh.seamosamigos.dto.PhotoWebModel;
 import com.himansh.seamosamigos.entity.Photos;
 import com.himansh.seamosamigos.repository.PhotoRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
@@ -26,9 +29,22 @@ public class PhotoService {
 		return photoRepository.getAllProfilePotos(userid);	
 	}
 	
-	//Get photos in Home
-	public List<Photos> getHomeScreenPhotos(int userid){
-		return photoRepository.getAllPotos(userid);	
+	//Get photos in Feeds
+	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){
+		Pageable pageable= PageRequest.of(0, 1);
+		return PhotoWebModel.findWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
+	}
+	
+	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
+		Pageable pageable= PageRequest.of(0, 1);
+		return PhotoWebModel.findWebModels(photoRepository.getAllPotos(userId, pageable));
+	}
+	
+	//Get photos in Feeds
+	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{
+		Pageable pageable= PageRequest.of(0, 1);
+		return PhotoWebModel.findWebModels(
+				photoRepository.getAllPotosByTimestamp(userid, utility.stringToTimeStamp(timestamp), pageable));	
 	}
 	
 	//Upload a picture

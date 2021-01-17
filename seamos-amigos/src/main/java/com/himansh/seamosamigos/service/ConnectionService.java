@@ -11,6 +11,7 @@ import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.Connections;
 import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.ConnectionRepository;
 import com.himansh.seamosamigos.repository.RequestsRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
@@ -44,7 +45,7 @@ public class ConnectionService {
 	}
 	
 	//Method for Follow Requests
-	 public boolean acceptOrRejectRequest(int userId, int requestId,char response) throws Exception {
+	 public boolean acceptOrRejectRequest(int userId, int requestId,char response) throws InAppException {
 		 UserEntity ue=getUserById(userId);
 		 FollowRequests request=null;
 		 for(FollowRequests r: ue.getRequests()) {
@@ -53,7 +54,7 @@ public class ConnectionService {
 			}
 		 }
 		 if (request==null) {
-			throw new Exception("No Request Found!!");
+			throw new InAppException("No Request Found!!");
 		 }
 		switch (response) {
 		case 'A':
@@ -71,15 +72,15 @@ public class ConnectionService {
 		}	 
 	 }
 	 
-	 public FollowRequests createRequest(int requestedUser,int requestingUser) throws Exception {
+	 public FollowRequests createRequest(int requestedUser,int requestingUser) throws InAppException {
 		 if (reqRepository.checkIfRequestAlreadyExists(requestedUser, requestingUser)!=null) {
-				throw new Exception("Already Requested");
+				throw new InAppException("Already Requested");
 			}
 		 if (conRepository.checkConnection(requestedUser, requestingUser)!=null) {
-			throw new Exception("Already Following");
+			throw new InAppException("Already Following");
 		}
 		 if(requestedUser==requestingUser) {
-			 throw new Exception("Can't follow yourself");
+			 throw new InAppException("Can't follow yourself");
 		 }
 		 FollowRequests request=new FollowRequests();
 		 request.setRequestedUser(getUserById(requestedUser));

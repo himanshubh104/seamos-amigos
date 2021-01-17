@@ -25,7 +25,7 @@ public class Utilities {
 	}
 	
 	public String dateToString(Date date)throws Exception{
-		String strDate= new SimpleDateFormat("dd-MMM-yyyy-hh-mm-ss").format(date);
+		String strDate= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(date);
 		return strDate;
 	}
 	

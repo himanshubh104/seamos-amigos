@@ -17,6 +17,7 @@ import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.RequestDto;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.FollowRequests;
+import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.ConnectionService;
 
 @RestController
@@ -49,7 +50,7 @@ public class ConnectionsController {
 	
 	@GetMapping(path="connections/request/respond")
 	public boolean acceptOrRejectRequest(@RequestParam(name = "requestId") int requestId,
-			@RequestParam(name = "response") char response) throws Exception {
+			@RequestParam(name = "response") char response) throws InAppException {
 		return connectionService.acceptOrRejectRequest(userId, requestId, response);
 	}
 	@GetMapping(path="connections/request")
@@ -60,7 +61,7 @@ public class ConnectionsController {
 	
 	@GetMapping(path="connections/request/create")
 	 public FollowRequests createRequest(@RequestParam(name = "requestedUser")int requestedUser)
-			 throws Exception {
+			 throws InAppException {
 		int requestingUser=userId;
 		return connectionService.createRequest(requestedUser, requestingUser);
 	 }
