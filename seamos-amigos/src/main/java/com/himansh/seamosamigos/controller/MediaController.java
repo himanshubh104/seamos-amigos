@@ -9,14 +9,17 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himansh.seamosamigos.config.UserPrincipal;
+import com.himansh.seamosamigos.dto.CommentWebModel;
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
 import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.service.CommentAndReplyService;
 import com.himansh.seamosamigos.service.PhotoService;
 
 @RestController
@@ -24,6 +27,8 @@ import com.himansh.seamosamigos.service.PhotoService;
 public class MediaController {
 	@Autowired
 	private PhotoService photoService;
+	@Autowired
+	private CommentAndReplyService commentService;
 	private int userId=-1;
 	
 	
@@ -63,5 +68,15 @@ public class MediaController {
 			return photoService.getHomeScreenPhotos(userId);
 		}
 		return photoService.getFeedsBytimestamp(userId, timestamp);		
+	}
+	
+	@GetMapping(path = "media/feed/comments")
+	public List<CommentWebModel> getPhotoComments(@RequestParam(name = "photoId") Integer photoId) throws Exception{
+		return commentService.getAllComments(photoId);		
+	}
+	
+	@PostMapping(path = "media/feed/addComment")
+	public Boolean addComment(@RequestBody CommentWebModel commentWebModel) throws Exception{
+		return commentService.saveComment(commentWebModel, userId) !=null;		
 	}
 }

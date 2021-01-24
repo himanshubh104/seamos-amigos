@@ -15,15 +15,15 @@ public interface PhotoRepository extends PagingAndSortingRepository<Photos, Inte
 	@Query("from photos p join p.users u where u.userId=:userId")
 	public List<Photos> getAllProfilePotos(@Param("userId") int userId);
 	
-	@Query("from photos p join p.users u where u.userId in"
+	@Query("select distinct p from photos p join p.users u where u.userId in"
 			+ "(select c.user2.userId from connections c where c.user1.userId=:userId) order by p.dateOfUpload desc")
 	public List<Photos> getAllPotos(@Param("userId") int userId, Pageable pageable);
 
-	@Query("from photos p join p.users u where u.userId in"
+	@Query("select distinct p from photos p join p.users u where u.userId in"
 			+ "(select c.user2.userId from connections c where c.user1.userId=:userId) and p.dateOfUpload < :timestamp order by p.dateOfUpload desc")
 	public List<Photos> getAllPotosByTimestamp(@Param("userId") int userId,@Param("timestamp") Date timestamp, Pageable pageable);
 
-	@Query("from photos p join p.users u where u.userId in"
+	@Query("select distinct p from photos p join p.users u where u.userId in"
 			+ "(select c.user2.userId from connections c where c.user1.userId=:userId) and p.photoId < :picId order by p.dateOfUpload desc")
 	public List<Photos> getAllPotosByPhotoId(@Param("userId") int userId,@Param("picId") Integer picId, Pageable pageable);
 }

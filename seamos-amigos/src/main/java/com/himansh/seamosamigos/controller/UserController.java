@@ -46,6 +46,7 @@ public class UserController {
 		String jwt=jwtUtil.generateToken(userPrincipal);
 		 Map<String,Object> map= new HashMap<>();
 	        map.put("authenticated",true);
+	        map.put("userId", userPrincipal.getUserId());
 	        map.put("jwt",jwt);
 		return map;
 	}
