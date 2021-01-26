@@ -21,8 +21,10 @@ public class CommentAndReplyService {
 	
 	public List<CommentWebModel> getAllComments(Integer photoId){
 		return commentRepository.getAllCommentsByPicId(photoId).stream()
-//				.filter(c->c.getPhotoId()!=null && c.getPhotoId()!=0)
-				.map(CommentWebModel::toWebModel).collect(Collectors.toList());
+				.map(c->{
+					c.setLikes(commentRepository.getTotalLikes(c.getCommentId()));
+					return CommentWebModel.toWebModel(c);
+				}).collect(Collectors.toList());
 	}
 	
 	public CommentWebModel saveComment(CommentWebModel commentWebModel, int userId) {

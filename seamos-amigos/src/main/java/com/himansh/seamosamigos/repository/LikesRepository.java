@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.himansh.seamosamigos.entity.LikesOnFeeds;
 
-public interface LikesRepository extends JpaRepository<LikesOnFeeds, Long>{
+public interface LikesRepository extends JpaRepository<LikesOnFeeds, Integer>{
 	@Query("select count(lof) from LikesOnFeeds lof where lof.feedId= :picId")
 	public Integer getTotalLikes(@Param("picId") Long picId);
 	

@@ -17,29 +17,35 @@ public class LikesOnFeeds implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long likeId;
-	private Long feedId;
-	private Long userId;
-	public Long getLikeId() {
+	private Integer likeId;
+	private Integer feedId;
+	private Integer userId;
+	private Integer commentId;
+	
+	
+	public Integer getLikeId() {
 		return likeId;
 	}
-	public void setLikeId(Long likeId) {
+	public void setLikeId(Integer likeId) {
 		this.likeId = likeId;
 	}
-	public Long getFeedId() {
+	public Integer getFeedId() {
 		return feedId;
 	}
-	public void setFeedId(Long feedId) {
+	public void setFeedId(Integer feedId) {
 		this.feedId = feedId;
 	}
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Integer getCommentId() {
+		return commentId;
+	}
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
 	}
 	
 }
