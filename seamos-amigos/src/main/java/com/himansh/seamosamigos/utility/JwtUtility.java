@@ -26,6 +26,11 @@ public class JwtUtility {
         return extractClaim(token, Claims::getExpiration);
     }
     
+    //Custom Addition check
+    public String extractClientIp(String token) {
+        return extractClaim(token, c->c.get("clientIp", String.class));
+    }
+    
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
@@ -35,14 +40,16 @@ public class JwtUtility {
         return extractExpiration(token).before(new Date());
     }
     
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails, String requestIp) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) 
+        		&& requestIp.equals(extractClientIp(token)));
     }
     
 	//Generating JWT
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, String clientIp) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("clientIp", clientIp);
         return createToken(claims, userDetails.getUsername());
     }
 

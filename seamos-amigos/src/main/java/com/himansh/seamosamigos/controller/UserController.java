@@ -3,6 +3,8 @@ package com.himansh.seamosamigos.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +19,7 @@ import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.service.UserService;
 import com.himansh.seamosamigos.utility.JwtUtility;
+import com.himansh.seamosamigos.utility.Utilities;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
@@ -25,6 +28,8 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private JwtUtility jwtUtil;
+	@Autowired
+	private Utilities utilities;
     @Autowired
     private AuthenticationManager authenticationManager;
 	    
@@ -36,14 +41,15 @@ public class UserController {
 	
 	//Login end point
 	@PostMapping(path = "users/login",consumes = "application/JSON")
-	public Map<String,Object> loginUser(@RequestBody UserDto user) {
+	public Map<String,Object> loginUser(@RequestBody UserDto user, HttpServletRequest request) {
 		try {
     		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 		} catch (BadCredentialsException e) {
 			throw new UsernameNotFoundException("Incorrect Username or Password",e);
 		}
+		String clientIp= utilities.getClientIp(request);
 		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
-		String jwt=jwtUtil.generateToken(userPrincipal);
+		String jwt=jwtUtil.generateToken(userPrincipal, clientIp);
 		 Map<String,Object> map= new HashMap<>();
 	        map.put("authenticated",true);
 	        map.put("userId", userPrincipal.getUserId());

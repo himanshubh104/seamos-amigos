@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,5 +79,10 @@ public class MediaController {
 	@PostMapping(path = "media/feed/addComment")
 	public Boolean addComment(@RequestBody CommentWebModel commentWebModel) throws Exception{
 		return commentService.saveComment(commentWebModel, userId) !=null;		
+	}
+	
+	@DeleteMapping(path = "media/feed/comments")
+	public String deleteComment(@RequestParam(name = "commentId") Integer commentId) throws Exception{
+		return commentService.deleteComment(commentId)>0?"Deleted":"Comment Not Deleted";		
 	}
 }

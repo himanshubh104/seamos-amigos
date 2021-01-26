@@ -133,8 +133,8 @@ public class CommentWebModel implements Serializable{
 		comment.setLikes(likes);
 		if(photoId!=null && photoId!=0)
 			comment.setPhotoId(photoId);
-		comment.setUserId(userId);
 		comment.setTimeStamp(Calendar.getInstance().getTime());
+		comment.setUserId(userId);
 		return comment;
 	}
 	

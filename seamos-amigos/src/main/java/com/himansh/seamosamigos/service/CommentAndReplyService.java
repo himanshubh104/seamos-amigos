@@ -40,4 +40,13 @@ public class CommentAndReplyService {
 		Comments comment= commentRepository.saveAndFlush(commentWebModel.toEntity());
 		return CommentWebModel.toWebModel(comment);
 	}
+	
+	public Integer deleteComment(Integer commentId) {
+		Optional<Comments> comment= commentRepository.findById(commentId);
+		if(comment.isPresent()) {
+			commentRepository.deleteById(commentId);
+			return commentId;
+		}
+		return 0;
+	}
 }
