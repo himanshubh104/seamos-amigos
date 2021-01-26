@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import com.himansh.seamosamigos.dto.CommentWebModel;
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
 import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.CommentAndReplyService;
 import com.himansh.seamosamigos.service.PhotoService;
 
@@ -55,7 +57,7 @@ public class MediaController {
 	public List<Photos> getUserPhotos(){
 		return photoService.getUserPhotos(userId);		
 	}
-	@GetMapping(path = "media/feeds/photosById")
+	@GetMapping(path = "media/feeds/photos-by-id")
 	public List<PhotoWebModel> getFeedsByPicId(@RequestParam(name="picId", required = false) Integer picId){
 		if(picId==null) {
 			return photoService.getHomeScreenPhotos(userId);
@@ -76,13 +78,18 @@ public class MediaController {
 		return commentService.getAllComments(photoId);		
 	}
 	
-	@PostMapping(path = "media/feed/addComment")
+	@PostMapping(path = "media/feed/add-comment")
 	public Boolean addComment(@RequestBody CommentWebModel commentWebModel) throws Exception{
 		return commentService.saveComment(commentWebModel, userId) !=null;		
 	}
 	
-	@DeleteMapping(path = "media/feed/comments")
+	@PutMapping(path = "media/feed/update-comment")
+	public Boolean updateComment(@RequestBody CommentWebModel commentWebModel) throws InAppException{
+		return commentService.updateComment(commentWebModel, userId) !=null;		
+	}
+	
+	@DeleteMapping(path = "media/feed/delete-comment")
 	public String deleteComment(@RequestParam(name = "commentId") Integer commentId) throws Exception{
-		return commentService.deleteComment(commentId)>0?"Deleted":"Comment Not Deleted";		
+		return commentService.deleteComment(commentId, userId)>0?"Deleted":"Comment Not Deleted";		
 	}
 }

@@ -24,11 +24,18 @@ public class Comments {
 	private Integer photoId;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timeStamp;
+	private Integer replyId;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "replyId")
 	private Set<Comments> replies;
 	
 	
+	public Integer getReplyId() {
+		return replyId;
+	}
+	public void setReplyId(Integer replyId) {
+		this.replyId = replyId;
+	}
 	public Date getTimeStamp() {
 		return timeStamp;
 	}

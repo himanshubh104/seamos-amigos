@@ -139,6 +139,7 @@ public class CommentWebModel implements Serializable{
 	}
 	
 	public static CommentWebModel toWebModel(Comments entity) {
+		//System.out.println("I got replyId "+entity.getReplyId());
 		Utilities util= new Utilities();
 		CommentWebModel model=new CommentWebModel();
 		model.setBody(entity.getBody());

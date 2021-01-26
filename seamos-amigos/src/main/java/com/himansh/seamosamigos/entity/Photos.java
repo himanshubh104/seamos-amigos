@@ -28,6 +28,7 @@ public class Photos {
 	private int likes;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfUpload;
+	//Why A single photo have many-to-many mapping with users?
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "user_photos",
