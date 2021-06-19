@@ -3,8 +3,6 @@ package com.himansh.seamosamigos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.CommentWebModel;
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
@@ -24,6 +21,7 @@ import com.himansh.seamosamigos.entity.Photos;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.CommentAndReplyService;
 import com.himansh.seamosamigos.service.PhotoService;
+import com.himansh.seamosamigos.utility.CurrentUser;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
@@ -37,14 +35,7 @@ public class MediaController {
 	
     @ModelAttribute
     public void fetchUser() {
-    	Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-    	if (auth !=null) {
-    		Object principal =auth.getPrincipal();
-        	if (principal instanceof UserPrincipal) {
-        		userId = ((UserPrincipal)principal).getUserId();
-        		System.out.println("User is: "+((UserPrincipal)principal).getUsername());
-        	} 
-		}
+    	userId = CurrentUser.getCurrentUserId();
     }
     /*-----------------------------------------------Photos-------------------------------------------------------*/
 	@PostMapping(path = "media/photos")

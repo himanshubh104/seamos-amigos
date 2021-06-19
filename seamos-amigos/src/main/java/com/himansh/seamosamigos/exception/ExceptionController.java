@@ -16,10 +16,18 @@ public class ExceptionController {
 	
 	@ExceptionHandler(value = InAppException.class)
 	public ResponseEntity<Map<String, String>> inAppException(InAppException ex){
-		log.error(ex.getMessage(), ex);
+		log.info(ex.getMessage());
 		HashMap<String, String> resp=new HashMap<String, String>();
 		resp.put("message", ex.getMessage());
 		return ResponseEntity.status(200).body(resp);
+	}
+	
+	@ExceptionHandler(value = UserException.class)
+	public ResponseEntity<Map<String, String>> userException(UserException ex){
+		log.info(ex.getMessage());
+		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("message", ex.getMessage());
+		return ResponseEntity.badRequest().body(resp);
 	}
 	
 	@ExceptionHandler(value = Exception.class)

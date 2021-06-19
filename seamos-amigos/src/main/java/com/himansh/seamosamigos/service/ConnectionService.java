@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.Connections;
 import com.himansh.seamosamigos.entity.FollowRequests;
-import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.entity.User;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.ConnectionRepository;
 import com.himansh.seamosamigos.repository.RequestsRepository;
@@ -27,12 +27,12 @@ public class ConnectionService {
 	private RequestsRepository reqRepository;
 	
 	
-	private UserEntity getUserById(int userId) {
+	private User getUserById(int userId) {
 		return userRepository.findById(userId).get();
 	}
 	
 	public List<UserDto> getUserFollowers(int userId){
-		UserEntity ue=getUserById(userId);
+		User ue=getUserById(userId);
 		return ue.getConnections().stream().map(con->{
 			return UserDto.generateDto(con.getUser2());
 		}).collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class ConnectionService {
 	
 	//Method for Follow Requests
 	 public boolean acceptOrRejectRequest(int userId, int requestId,char response) throws InAppException {
-		 UserEntity ue=getUserById(userId);
+		 User ue=getUserById(userId);
 		 FollowRequests request=null;
 		 for(FollowRequests r: ue.getRequests()) {
 			 if (r.getRequestId()==requestId) {

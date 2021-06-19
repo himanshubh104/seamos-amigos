@@ -12,19 +12,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Entity(name = "users")
-//@Table(name = "users") //{if we use this then in in repository we have to use the actual class name}
+@Entity
+@Table(name = "users") //{if we use this then in in repository we have to use the actual class name}
 //@SequenceGenerator(name = "user_id_seq",initialValue = 1000,allocationSize = 1)
-public class UserEntity {
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	private String firstName;
 	private String lastName;
 	private String password;
+	private int activeSessions;
 	@Column(unique = true, nullable = false,length = 100)
 	private String email;
 	@ManyToMany(mappedBy = "users")
@@ -41,8 +43,16 @@ public class UserEntity {
     		inverseJoinColumns = @JoinColumn(name="role_id")
     		)
     private List<Roles> roles;
+    @OneToMany
+    private List<LoginSession> loginSessions;
     
-    	
+    
+	public List<LoginSession> getLoginSessions() {
+		return loginSessions;
+	}
+	public void setLoginSessions(List<LoginSession> loginSessions) {
+		this.loginSessions = loginSessions;
+	}
 	public List<Roles> getRoles() {
 		return roles;
 	}
@@ -100,6 +110,11 @@ public class UserEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+	public int getActiveSessions() {
+		return activeSessions;
+	}
+	public void setActiveSessions(int activeSessions) {
+		this.activeSessions = activeSessions;
+	}
 	
 }

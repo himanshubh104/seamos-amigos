@@ -7,24 +7,28 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.entity.User;
 
 public class UserPrincipal implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
-	private UserEntity userEntity;
+	private User userEntity;
 	
 	public UserPrincipal() {
 		super();
 	}
 
-	public UserPrincipal(UserEntity userEntity) {
+	public UserPrincipal(User userEntity) {
 		super();
 		this.userEntity = userEntity;
 	}
 
 	public int getUserId() {
 		return userEntity.getUserId();
+	}
+	
+	public int getActiveSessions() {
+		return userEntity.getActiveSessions();
 	}
 	
 	@Override

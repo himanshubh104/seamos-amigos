@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.himansh.seamosamigos.entity.Roles;
-import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.entity.User;
 
 public class UserDto {
 	private int userId;
@@ -52,8 +52,8 @@ public class UserDto {
 		this.email = email;
 	}
 	
-	public UserEntity generateEntity() {
-		UserEntity ue=new UserEntity();
+	public User generateEntity() {
+		User ue=new User();
 		ue.setFirstName(firstName);
 		ue.setLastName(lastName);
 		ue.setPassword(password);
@@ -67,7 +67,7 @@ public class UserDto {
 		return ue;		
 	}
 	
-	public static UserDto generateDto(UserEntity ue) {
+	public static UserDto generateDto(User ue) {
 		UserDto ud=new UserDto();
 		ud.setUserId(ue.getUserId());
 		ud.setFirstName(ue.getFirstName());

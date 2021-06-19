@@ -16,10 +16,10 @@ public class FollowRequests {
 	private int requestId;
 	@ManyToOne
 	@JoinColumn(name = "requestedUser")
-	private UserEntity requestedUser;
+	private User requestedUser;
 	@ManyToOne
 	@JoinColumn(name = "requestingUser")
-	private UserEntity requestingUser;
+	private User requestingUser;
 	public int getRequestId() {
 		return requestId;
 	}
@@ -27,18 +27,18 @@ public class FollowRequests {
 		this.requestId = requestId;
 	}
 	@JsonBackReference
-	public UserEntity getRequestedUser() {
+	public User getRequestedUser() {
 		return requestedUser;
 	}
-	public void setRequestedUser(UserEntity requestedUser) {
+	public void setRequestedUser(User requestedUser) {
 		this.requestedUser = requestedUser;
 	}
 	
 	@JsonBackReference
-	public UserEntity getRequestingUser() {
+	public User getRequestingUser() {
 		return requestingUser;
 	}
-	public void setRequestingUser(UserEntity requestingUser) {
+	public void setRequestingUser(User requestingUser) {
 		this.requestingUser = requestingUser;
 	}
 	

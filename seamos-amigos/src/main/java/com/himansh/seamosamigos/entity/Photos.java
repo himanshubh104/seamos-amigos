@@ -35,7 +35,7 @@ public class Photos {
 			joinColumns = @JoinColumn(name="photoId"),
 			inverseJoinColumns = @JoinColumn(name = "userId")
 			)
-	private List<UserEntity> users;
+	private List<User> users;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Comments> comments;
 	
@@ -65,10 +65,10 @@ public class Photos {
 	}
 	
 	@JsonBackReference
-	public List<UserEntity> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
-	public void setUsers(List<UserEntity> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 	public int getLikes() {

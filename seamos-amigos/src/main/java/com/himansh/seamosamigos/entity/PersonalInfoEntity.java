@@ -20,7 +20,7 @@ public class PersonalInfoEntity {
 	private String bio;
 	@OneToOne
 	@JoinColumn(name = "userId")
-	private UserEntity user;
+	private User user;
 
 	public int getUserId() {
 		return userId;
@@ -58,10 +58,10 @@ public class PersonalInfoEntity {
 	public void setBio(String bio) {
 		this.bio = bio;
 	}
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

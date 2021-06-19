@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
+import com.himansh.seamosamigos.entity.LoginSession;
 import com.himansh.seamosamigos.entity.PersonalInfoEntity;
 import com.himansh.seamosamigos.entity.Roles;
-import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.entity.User;
+import com.himansh.seamosamigos.exception.UserException;
+import com.himansh.seamosamigos.repository.LoginSessionRepository;
 import com.himansh.seamosamigos.repository.PersonalInfoRepository;
 import com.himansh.seamosamigos.repository.RoleRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
+import com.himansh.seamosamigos.utility.CurrentUser;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -30,6 +36,8 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
+	private LoginSessionRepository loginSessionRepo;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	private List<Roles> getUserRoles(List<String> roles){
@@ -39,13 +47,13 @@ public class UserService implements UserDetailsService{
 	}
 	
 	//Register User
-	public UserDto addUser(UserEntity user, List<String> roles) {
+	public UserDto addUser(User user, List<String> roles) {
 		user.setRoles(getUserRoles(roles));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return UserDto.generateDto(userRepository.saveAndFlush(user));	
 	}
 	
-	private UserEntity getUserById(int userId) {
+	private User getUserById(int userId) {
 		return userRepository.findById(userId).get();
 	}
 	
@@ -54,7 +62,7 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public List<UserDto> getUserFollowers(int userId){
-		UserEntity ue=getUserById(userId);
+		User ue=getUserById(userId);
 		return ue.getConnections().stream().map(con->{
 			return UserDto.generateDto(con.getUser2());
 		}).collect(Collectors.toList());
@@ -69,10 +77,34 @@ public class UserService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		UserEntity ue=userRepository.findByEmail(username);
+		User ue=userRepository.findByEmail(username);
 		if (ue==null) {
 			throw new UsernameNotFoundException("User Not Found!");
 		}
 		return new UserPrincipal(ue);
+	}
+	
+	public void updateActiveSessions(Integer userId, String clientIp) throws UserException {
+		if (loginSessionRepo.checkAlreadyLoggedIn(clientIp)>0) {
+			throw new UserException("User already logged in with same IP.");
+		}
+		LoginSession session = new LoginSession();
+		session.setUserId(userId);
+		session.setUserIp(clientIp);
+		loginSessionRepo.saveAndFlush(session);
+		userRepository.addLoginSession(userId);
+	}
+	
+	public boolean logoutUser(String clientIp) {
+		User user = userRepository.getOne(CurrentUser.getCurrentUserId());
+		int activeSessions = user.getActiveSessions();
+		if (activeSessions == 0)
+			return false;
+		user.setActiveSessions(activeSessions-1);
+		userRepository.saveAndFlush(user);
+		loginSessionRepo.deleteByUserIp(clientIp);
+		Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+		auth.setAuthenticated(false);
+		return true;
 	}
 }

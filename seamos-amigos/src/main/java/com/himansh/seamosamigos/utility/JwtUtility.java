@@ -15,8 +15,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtility {
 	
-    private static final String SECRET_KEY = "Jx67H20p71gXQLopZ52";
-
     //Extracting and Validating JWT
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -32,7 +30,7 @@ public class JwtUtility {
     }
     
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        final Claims claims = Jwts.parser().setSigningKey(AmigosConstants.SECRET_KEY).parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }
     
@@ -56,7 +54,7 @@ public class JwtUtility {
 	private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+                .signWith(SignatureAlgorithm.HS256, AmigosConstants.SECRET_KEY).compact();
     }
 
 }

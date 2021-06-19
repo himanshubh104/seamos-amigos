@@ -2,25 +2,34 @@ package com.himansh.seamosamigos.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.himansh.seamosamigos.entity.UserEntity;
+import com.himansh.seamosamigos.entity.User;
 
-public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 	
-	public UserEntity findByEmail(String email);
+	public User findByEmail(String email);
 	
-	@Query("from users u where u.userId=userid")
-	public List<UserEntity> getListOfUsers(@Param("userid") int userid);
+	@Query("from User u where u.userId=userid")
+	public List<User> getListOfUsers(@Param("userid") int userid);
 	
-//	@Query("from users u where u.userId in(select c.user2Id from connection c where c.user1.userId=:userid)")
+//	@Query("from User u where u.userId in(select c.user2Id from connection c where c.user1.userId=:userid)")
 //	public List<UserEntity> getConnectionList(@Param("userid") int userid);
 	
 	@Query("select c.user2 from connections c where c.user1.userId=:userid")
-	public List<UserEntity> getFollowers(@Param("userid") int userid);
+	public List<User> getFollowers(@Param("userid") int userid);
 	
 	@Query("select c.user1 from connections c where c.user2.userId=:userid")
-	public List<UserEntity> getFollowings(@Param("userid") int userid);
+	public List<User> getFollowings(@Param("userid") int userid);
+	
+	@Transactional
+	@Modifying
+	@Query("update User u set u.activeSessions = u.activeSessions+1 where u.userId = :userId")
+	Integer addLoginSession(Integer userId);
+
 }

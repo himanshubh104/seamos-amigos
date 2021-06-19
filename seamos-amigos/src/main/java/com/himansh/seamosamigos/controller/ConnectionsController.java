@@ -5,20 +5,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.RequestDto;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.ConnectionService;
+import com.himansh.seamosamigos.utility.CurrentUser;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
@@ -29,14 +27,7 @@ public class ConnectionsController {
 	
     @ModelAttribute
     public void fetchUser() {
-    	Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-    	if (auth !=null) {
-    		Object principal =auth.getPrincipal();
-        	if (principal instanceof UserPrincipal) {
-        		userId = ((UserPrincipal)principal).getUserId();
-        		System.out.println("User is: "+((UserPrincipal)principal).getUsername());
-        	} 
-		}
+    	userId = CurrentUser.getCurrentUserId();
     }
     
 	@GetMapping(path = "connections/followers")
