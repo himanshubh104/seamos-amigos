@@ -29,4 +29,7 @@ public interface PhotoRepository extends PagingAndSortingRepository<Photos, Inte
 
 	@Query("select count(lof.userId) from LikesOnFeeds lof where lof.feedId= :picId")
 	public Integer getTotalLikes(@Param("picId") Integer picId);
+	
+	@Query("select max(p.photoId) from photos p")
+	Integer getMaxPhotoId();
 }

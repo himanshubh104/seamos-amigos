@@ -48,13 +48,15 @@ public class PhotoService {
 	}
 	
 	//Upload a picture
-	public PhotoDto addUserPhoto(PhotoDto photo) throws Exception{
-		String uri=utility.saveUploadedFile(photo.getPicData(),photo.getUserId());
+	public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception{
+		Integer lastPicId = photoRepository.getMaxPhotoId();
+		lastPicId = lastPicId==null? 0 : lastPicId;
+		String uri=utility.saveUploadedFile(photo.getPicData(), userId, lastPicId);
 		if (uri!=null) {
 			Photos photoEntity=photo.generatePhotoEntity();
 			photoEntity.setUrl(uri);
 			photoEntity.setDateOfUpload(Calendar.getInstance().getTime());
-			photoEntity.setUsers(userRepository.getListOfUsers(photo.getUserId()));
+			photoEntity.setUsers(userRepository.getListOfUsers(new int[]{userId}));
 			return PhotoDto.generateDto(photoRepository.save(photoEntity));	
 		}
 		return photo;

@@ -38,9 +38,9 @@ public class MediaController {
     	userId = CurrentUser.getCurrentUserId();
     }
     /*-----------------------------------------------Photos-------------------------------------------------------*/
-	@PostMapping(path = "media/photos")
+	@PostMapping(path = "media/add-photo")
 	public PhotoDto addUserPhoto(@ModelAttribute PhotoDto photoDto) throws Exception {
-		PhotoDto pic=photoService.addUserPhoto(photoDto);
+		PhotoDto pic=photoService.addUserPhoto(photoDto, userId);
 		pic.setPicData(null);
 		return pic;
 	}

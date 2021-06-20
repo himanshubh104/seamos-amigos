@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	public User findByEmail(String email);
 	
-	@Query("from User u where u.userId=userid")
-	public List<User> getListOfUsers(@Param("userid") int userid);
+	@Query("from User u where u.userId in :userIds")
+	public List<User> getListOfUsers(@Param("userIds") int[] userIds);
 	
 //	@Query("from User u where u.userId in(select c.user2Id from connection c where c.user1.userId=:userid)")
 //	public List<UserEntity> getConnectionList(@Param("userid") int userid);

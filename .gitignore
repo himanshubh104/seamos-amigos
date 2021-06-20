@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 seamos-amigos/app-log/
+seamos-amigos/stored-media/
 
 ### STS ###
 /stored-images

@@ -2,6 +2,7 @@ package com.himansh.seamosamigos.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.himansh.seamosamigos.entity.Photos;
 
 public class PhotoDto {
@@ -11,6 +12,7 @@ public class PhotoDto {
 	private String caption;
 	private int userId;
 	
+	@JsonIgnore
 	public MultipartFile getPicData() {
 		return picData;
 	}
