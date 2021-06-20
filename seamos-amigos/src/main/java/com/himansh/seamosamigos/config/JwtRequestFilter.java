@@ -67,7 +67,8 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		}
         if (!errMessage.isEmpty()) {
         	System.out.println(errMessage);
-        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, errMessage); // Not working for some reason.
+        	response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        	response.getWriter().write(errMessage);
         }
         else
         	filterChain.doFilter(request, response);		

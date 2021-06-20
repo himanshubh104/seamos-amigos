@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himansh.seamosamigos.config.UserPrincipal;
@@ -45,7 +46,9 @@ public class UserController {
 	
 	//Login end point
 	@PostMapping(path = "users/login",consumes = "application/JSON")
-	public Map<String,Object> loginUser(@RequestBody UserDto user, HttpServletRequest request) throws InAppException {
+	public Map<String,Object> loginUser(@RequestBody UserDto user,
+			@RequestParam(required = false) String forceLoginClienIp,
+			HttpServletRequest request) throws InAppException {
 		try {
     		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 		} catch (BadCredentialsException e) {
@@ -53,7 +56,10 @@ public class UserController {
 		}
 		String clientIp= utilities.getClientIp(request);
 		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
-		if (userPrincipal.getActiveSessions() > AmigosConstants.MAX_ACTIVE_SEESIONS) {
+		if (forceLoginClienIp != null) {
+			userService.forceLogout(userPrincipal.getUserId(), forceLoginClienIp);
+		}
+		else if (userPrincipal.getActiveSessions() >= AmigosConstants.MAX_ACTIVE_SEESIONS) {
 			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
 		}
 		userService.updateActiveSessions(userPrincipal.getUserId(), clientIp);

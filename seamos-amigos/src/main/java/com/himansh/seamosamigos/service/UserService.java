@@ -102,6 +102,17 @@ public class UserService implements UserDetailsService{
 		userRepository.addLoginSession(userId);
 	}
 	
+	public boolean forceLogout(int userId, String clientIp) {
+		User user = userRepository.getOne(userId);
+		int activeSessions = user.getActiveSessions();
+		if (activeSessions == 0)
+			return false;
+		user.setActiveSessions(activeSessions-1);
+		userRepository.saveAndFlush(user);
+		loginSessionRepo.deleteByUserIp(clientIp);
+		return true;
+	}
+	
 	public boolean logoutUser(String clientIp) {
 		User user = userRepository.getOne(CurrentUser.getCurrentUserId());
 		int activeSessions = user.getActiveSessions();
