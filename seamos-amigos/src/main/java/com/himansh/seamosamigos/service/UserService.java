@@ -1,8 +1,11 @@
 package com.himansh.seamosamigos.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -19,7 +22,6 @@ import com.himansh.seamosamigos.entity.LoginSession;
 import com.himansh.seamosamigos.entity.PersonalInfoEntity;
 import com.himansh.seamosamigos.entity.Roles;
 import com.himansh.seamosamigos.entity.User;
-import com.himansh.seamosamigos.exception.UserException;
 import com.himansh.seamosamigos.repository.LoginSessionRepository;
 import com.himansh.seamosamigos.repository.PersonalInfoRepository;
 import com.himansh.seamosamigos.repository.RoleRepository;
@@ -39,6 +41,7 @@ public class UserService implements UserDetailsService{
 	private LoginSessionRepository loginSessionRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	private Logger log = LoggerFactory.getLogger(UserService.class);
 	
 	private List<Roles> getUserRoles(List<String> roles){
 		return roles.stream().map(r->{
@@ -84,13 +87,17 @@ public class UserService implements UserDetailsService{
 		return new UserPrincipal(ue);
 	}
 	
-	public void updateActiveSessions(Integer userId, String clientIp) throws UserException {
-		if (loginSessionRepo.checkAlreadyLoggedIn(clientIp)>0) {
-			throw new UserException("User already logged in with same IP.");
+	public void updateActiveSessions(Integer userId, String clientIp) {
+		LoginSession session = loginSessionRepo.getByUserIdAndUserIp(userId, clientIp);
+		if (session != null) {
+			log.info("User already logged in with same IP. Overwritting previois login..");
+			session.setLoginTime(new Date());
 		}
-		LoginSession session = new LoginSession();
-		session.setUserId(userId);
-		session.setUserIp(clientIp);
+		else {
+			session = new LoginSession();
+			session.setUserId(userId);
+			session.setUserIp(clientIp);
+		}
 		loginSessionRepo.saveAndFlush(session);
 		userRepository.addLoginSession(userId);
 	}

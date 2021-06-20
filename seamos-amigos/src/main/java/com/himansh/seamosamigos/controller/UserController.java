@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.exception.InAppException;
-import com.himansh.seamosamigos.exception.UserException;
 import com.himansh.seamosamigos.service.UserService;
 import com.himansh.seamosamigos.utility.AmigosConstants;
 import com.himansh.seamosamigos.utility.JwtUtility;
@@ -46,7 +45,7 @@ public class UserController {
 	
 	//Login end point
 	@PostMapping(path = "users/login",consumes = "application/JSON")
-	public Map<String,Object> loginUser(@RequestBody UserDto user, HttpServletRequest request) throws InAppException, UserException {
+	public Map<String,Object> loginUser(@RequestBody UserDto user, HttpServletRequest request) throws InAppException {
 		try {
     		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 		} catch (BadCredentialsException e) {
@@ -55,7 +54,7 @@ public class UserController {
 		String clientIp= utilities.getClientIp(request);
 		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
 		if (userPrincipal.getActiveSessions() > AmigosConstants.MAX_ACTIVE_SEESIONS) {
-			throw new InAppException("User already logged in, with: "+userPrincipal.getActiveSessions()+"active sessions.");
+			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
 		}
 		userService.updateActiveSessions(userPrincipal.getUserId(), clientIp);
 		String jwt=jwtUtil.generateToken(userPrincipal, clientIp);
