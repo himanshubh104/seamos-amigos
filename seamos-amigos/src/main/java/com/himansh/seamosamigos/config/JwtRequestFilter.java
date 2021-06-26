@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 	        	else {
 		        	CurrentUser.setCurrentUserId(userDetails.getUserId());					// Setting current logged in user.
 		        	
-		        	if(jwtUtil.validateToken(jwt, userDetails, utilities.getClientIp(request))) {
+		        	if(jwtUtil.validateToken(jwt, userDetails, utilities.extractClientIp(request))) {
 		        		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 		                        userDetails, null, userDetails.getAuthorities());
 		                usernamePasswordAuthenticationToken

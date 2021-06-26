@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import eu.bitwalker.useragentutils.UserAgent;
+
 @Component
 public class Utilities {
 	
@@ -52,7 +54,7 @@ public class Utilities {
 	}
 	
 	
-	public String getClientIp(HttpServletRequest request) {
+	public String extractClientIp(HttpServletRequest request) {
         String remoteAddr = "";
         if (request != null) {
             remoteAddr = request.getHeader("X-FORWARDED-FOR");
@@ -62,4 +64,9 @@ public class Utilities {
         }
         return remoteAddr;
     }
+	
+	public String extractClientUserAgent(HttpServletRequest request) {
+		UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+		return userAgent.getBrowser().getName()+" : "+userAgent.getOperatingSystem().getName();
+	}
 }

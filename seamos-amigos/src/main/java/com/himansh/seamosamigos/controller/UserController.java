@@ -1,6 +1,7 @@
 package com.himansh.seamosamigos.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +55,8 @@ public class UserController {
 		} catch (BadCredentialsException e) {
 			throw new UsernameNotFoundException("Incorrect Username or Password",e);
 		}
-		String clientIp= utilities.getClientIp(request);
+		String clientIp= utilities.extractClientIp(request);
+		String userAgent = utilities.extractClientUserAgent(request);
 		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
 		if (forceLoginClienIp != null) {
 			userService.forceLogout(userPrincipal.getUserId(), forceLoginClienIp);
@@ -62,7 +64,7 @@ public class UserController {
 		else if (userPrincipal.getActiveSessions() >= AmigosConstants.MAX_ACTIVE_SEESIONS) {
 			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
 		}
-		userService.updateActiveSessions(userPrincipal.getUserId(), clientIp);
+		userService.updateActiveSessions(userPrincipal.getUserId(), clientIp, userAgent);
 		String jwt=jwtUtil.generateToken(userPrincipal, clientIp);
 		 Map<String,Object> map= new HashMap<>();
 	        map.put("authenticated",true);
@@ -71,13 +73,24 @@ public class UserController {
 		return map;
 	}
 	
+	@PostMapping(path = "users/get-active-user-agents",consumes = "application/JSON")
+	public List<Map<String, Object>> getActiveAgentsWithIp(@RequestBody UserDto user, HttpServletRequest request) throws InAppException {
+		try {
+    		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+		} catch (BadCredentialsException e) {
+			throw new UsernameNotFoundException("Incorrect Username or Password",e);
+		}
+		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
+		return userService.getActiveAgentsWithIp(userPrincipal.getUserId());
+	}
+	
 	@GetMapping("users/logout")
 	public ResponseEntity<Object> logoutUser(HttpServletRequest request) {
 		//Object response = true;
 		//if (!userService.logoutUser()) {
 			//response = "No active session found.";
 		//}
-		boolean resp = userService.logoutUser(utilities.getClientIp(request));
+		boolean resp = userService.logoutUser(utilities.extractClientIp(request));
 		return ResponseEntity.ok(resp);
 	}
 

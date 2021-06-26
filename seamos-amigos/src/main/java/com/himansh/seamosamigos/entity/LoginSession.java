@@ -18,6 +18,7 @@ public class LoginSession {
 	private int loginId;
 	private int userId;
 	private String userIp;
+	private String userAgent;
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date loginTime = new Date();
 	
@@ -45,4 +46,11 @@ public class LoginSession {
 	public void setLoginTime(Date loginTime) {
 		this.loginTime = loginTime;
 	}
+	public String getUserAgent() {
+		return userAgent;
+	}
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	
 }

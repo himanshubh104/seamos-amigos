@@ -1,8 +1,12 @@
 package com.himansh.seamosamigos.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +91,7 @@ public class UserService implements UserDetailsService{
 		return new UserPrincipal(ue);
 	}
 	
-	public void updateActiveSessions(Integer userId, String clientIp) {
+	public void updateActiveSessions(Integer userId, String clientIp, String userAgent) {
 		LoginSession session = loginSessionRepo.getByUserIdAndUserIp(userId, clientIp);
 		if (session != null) {
 			log.info("User already logged in with same IP. Overwritting previois login..");
@@ -97,6 +101,7 @@ public class UserService implements UserDetailsService{
 			session = new LoginSession();
 			session.setUserId(userId);
 			session.setUserIp(clientIp);
+			session.setUserAgent(userAgent);
 		}
 		loginSessionRepo.saveAndFlush(session);
 		userRepository.addLoginSession(userId);
@@ -124,5 +129,21 @@ public class UserService implements UserDetailsService{
 		Authentication auth= SecurityContextHolder.getContext().getAuthentication();
 		auth.setAuthenticated(false);
 		return true;
+	}
+
+	public List<Map<String, Object>> getActiveAgentsWithIp(int userId) {
+		List<Tuple> loginDetails = loginSessionRepo.getUserIpAndAgents(userId);
+		List<Map<String, Object>> ipList;
+		ipList =loginDetails.stream().map(d->{
+			HashMap<String, Object> ipObj = new HashMap<>();
+			String ip = d.get(0, String.class);
+			String agent = d.get(1, String.class);
+			Date timeStamp = d.get(2, Date.class);
+			ipObj.put("ip", ip);
+			ipObj.put("agent", agent);
+			ipObj.put("time_stamp", timeStamp);
+			return ipObj;
+		}).collect(Collectors.toList());
+		return ipList;
 	}
 }
