@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.persistence.Tuple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,25 +59,8 @@ public class UserService implements UserDetailsService{
 		return UserDto.generateDto(userRepository.saveAndFlush(user));	
 	}
 	
-	private User getUserById(int userId) {
-		return userRepository.findById(userId).get();
-	}
-	
 	public PersonalInfoEntity getUserInfo(int userId) {
 		return infoRepository.findById(userId).get();
-	}
-	
-	public List<UserDto> getUserFollowers(int userId){
-		User ue=getUserById(userId);
-		return ue.getConnections().stream().map(con->{
-			return UserDto.generateDto(con.getUser2());
-		}).collect(Collectors.toList());
-	}
-	
-	public List<UserDto> getUserFolloiwngs(int userId){
-		return userRepository.getFollowings(userId).stream().map(u->{
-			return UserDto.generateDto(u);
-		}).collect(Collectors.toList());
 	}
 
 	@Override
@@ -91,7 +73,7 @@ public class UserService implements UserDetailsService{
 		return new UserPrincipal(ue);
 	}
 	
-	public void updateActiveSessions(Integer userId, String clientIp, String userAgent) {
+	public long updateActiveSessions(Integer userId, String clientIp, String userAgent) {
 		LoginSession session = loginSessionRepo.getByUserIdAndUserIp(userId, clientIp);
 		if (session != null) {
 			log.info("User already logged in with same IP. Overwritting previois login..");
@@ -103,8 +85,8 @@ public class UserService implements UserDetailsService{
 			session.setUserIp(clientIp);
 			session.setUserAgent(userAgent);
 		}
-		loginSessionRepo.saveAndFlush(session);
 		userRepository.addLoginSession(userId);
+		return loginSessionRepo.saveAndFlush(session).getLoginId();
 	}
 	
 	public boolean forceLogout(int userId, String clientIp) {
@@ -132,18 +114,21 @@ public class UserService implements UserDetailsService{
 	}
 
 	public List<Map<String, Object>> getActiveAgentsWithIp(int userId) {
-		List<Tuple> loginDetails = loginSessionRepo.getUserIpAndAgents(userId);
-		List<Map<String, Object>> ipList;
-		ipList =loginDetails.stream().map(d->{
-			HashMap<String, Object> ipObj = new HashMap<>();
-			String ip = d.get(0, String.class);
-			String agent = d.get(1, String.class);
-			Date timeStamp = d.get(2, Date.class);
+		var loginDetails = loginSessionRepo.getUserIpAndAgents(userId);
+		var ipList = loginDetails.stream().map(d->{
+			Map<String, Object> ipObj = new HashMap<>();
+			var ip = d.get(0, String.class);
+			var agent = d.get(1, String.class);
+			var timeStamp = d.get(2, Date.class);
 			ipObj.put("ip", ip);
 			ipObj.put("agent", agent);
 			ipObj.put("time_stamp", timeStamp);
 			return ipObj;
 		}).collect(Collectors.toList());
 		return ipList;
+	}
+	
+	public Optional<LoginSession> getLoginDetails(Long loginId) {
+		return loginSessionRepo.findById(loginId);
 	}
 }

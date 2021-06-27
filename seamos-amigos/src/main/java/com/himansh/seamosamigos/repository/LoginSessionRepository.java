@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.himansh.seamosamigos.entity.LoginSession;
 
-public interface LoginSessionRepository extends JpaRepository<LoginSession, Integer> {
+public interface LoginSessionRepository extends JpaRepository<LoginSession, Long> {
 	
 	@Transactional
 	@Modifying

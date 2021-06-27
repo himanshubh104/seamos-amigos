@@ -64,8 +64,12 @@ public class UserController {
 		else if (userPrincipal.getActiveSessions() >= AmigosConstants.MAX_ACTIVE_SEESIONS) {
 			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
 		}
-		userService.updateActiveSessions(userPrincipal.getUserId(), clientIp, userAgent);
-		String jwt=jwtUtil.generateToken(userPrincipal, clientIp);
+		long loginId = userService.updateActiveSessions(userPrincipal.getUserId(), clientIp, userAgent);
+		Map<String, Object> claims = new HashMap<>();
+        claims.put("clientIp", clientIp);
+        claims.put("loginId", loginId);
+		String jwt=jwtUtil.generateToken(userPrincipal, claims);
+		
 		 Map<String,Object> map= new HashMap<>();
 	        map.put("authenticated",true);
 	        map.put("userId", userPrincipal.getUserId());

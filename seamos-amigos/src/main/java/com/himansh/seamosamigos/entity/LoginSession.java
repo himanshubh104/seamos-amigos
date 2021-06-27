@@ -15,17 +15,17 @@ import javax.persistence.TemporalType;
 public class LoginSession {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int loginId;
+	private long loginId;
 	private int userId;
 	private String userIp;
 	private String userAgent;
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date loginTime = new Date();
 	
-	public int getLoginId() {
+	public long getLoginId() {
 		return loginId;
 	}
-	public void setLoginId(int loginId) {
+	public void setLoginId(long loginId) {
 		this.loginId = loginId;
 	}
 	public int getUserId() {

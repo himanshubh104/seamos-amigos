@@ -1,7 +1,6 @@
 package com.himansh.seamosamigos.utility;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -25,8 +24,8 @@ public class JwtUtility {
     }
     
     //Custom Addition check
-    public String extractClientIp(String token) {
-        return extractClaim(token, c->c.get("clientIp", String.class));
+    public String extractClaimValue(String token, String claimKey) {
+        return extractClaim(token, c->c.get(claimKey, String.class));
     }
     
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -41,13 +40,11 @@ public class JwtUtility {
     public Boolean validateToken(String token, UserDetails userDetails, String requestIp) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) 
-        		&& requestIp.equals(extractClientIp(token)));
+        		&& requestIp.equals(extractClaimValue(token, "clientIp")));
     }
     
 	//Generating JWT
-    public String generateToken(UserDetails userDetails, String clientIp) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("clientIp", clientIp);
+    public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
         return createToken(claims, userDetails.getUsername());
     }
 
