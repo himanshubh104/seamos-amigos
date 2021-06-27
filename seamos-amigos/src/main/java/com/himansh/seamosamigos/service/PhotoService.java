@@ -44,7 +44,7 @@ public class PhotoService {
 	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{
 		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.findWebModels(
-				photoRepository.getAllPotosByTimestamp(userid, utility.stringToTimeStamp(timestamp), pageable));	
+				photoRepository.getAllPotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));	
 	}
 	
 	//Upload a picture

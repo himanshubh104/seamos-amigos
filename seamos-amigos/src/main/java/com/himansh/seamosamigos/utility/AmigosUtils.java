@@ -23,7 +23,7 @@ public class AmigosUtils {
 		return date;
 	}
 	
-	public Date stringToTimeStamp(String strDate)throws Exception{
+	public Date stringToDateTime(String strDate)throws Exception{
 		Date date= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(strDate);
 		return date;
 	}

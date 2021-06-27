@@ -51,7 +51,7 @@ public class ConnectionsController {
 	}
 	
 	@GetMapping(path="connections/request/create")
-	 public FollowRequests createRequest(@RequestParam(name = "requestedUser")int requestedUser)
+	 public FollowRequests createRequest(@RequestParam(name = "requestedUser") String requestedUser)
 			 throws InAppException {
 		int requestingUser=userId;
 		return connectionService.createRequest(requestedUser, requestingUser);

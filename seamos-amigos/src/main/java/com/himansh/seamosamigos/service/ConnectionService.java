@@ -72,16 +72,18 @@ public class ConnectionService {
 		}	 
 	 }
 	 
-	 public FollowRequests createRequest(int requestedUser,int requestingUser) throws InAppException {
-		 if (reqRepository.checkIfRequestAlreadyExists(requestedUser, requestingUser)!=null) {
-				throw new InAppException("Already Requested");
-			}
-		 if (conRepository.checkConnection(requestedUser, requestingUser)!=null) {
-			throw new InAppException("Already Following");
-		}
-		 if(requestedUser==requestingUser) {
-			 throw new InAppException("Can't follow yourself");
-		 }
+	 public FollowRequests createRequest(String requestedUserEmail, int requestingUser) throws InAppException {
+		 User reqUser = userRepository.findByEmail(requestedUserEmail);
+		 if (reqUser == null) 
+			 throw new InAppException("Invalid user email.");
+		 int requestedUser = reqUser.getUserId();
+		 if(requestedUser == requestingUser) 
+			 throw new InAppException("Can't follow yourself.");
+		 if (conRepository.checkConnection(requestedUser, requestingUser) != null) 
+			 throw new InAppException("Already Following.");
+		 if (reqRepository.checkIfRequestAlreadyExists(requestedUser, requestingUser) != null) 
+			 throw new InAppException("Already Requested.");
+		 
 		 FollowRequests request=new FollowRequests();
 		 request.setRequestedUser(getUserById(requestedUser));
 		 request.setRequestingUser(getUserById(requestingUser));

@@ -73,8 +73,8 @@ public class UserDto {
 		ud.setFirstName(ue.getFirstName());
 		ud.setLastName(ue.getLastName());
 		ud.setEmail(ue.getEmail());
-		ud.setRoles(ue.getRoles().stream().map(Roles::getRoleName).collect(Collectors.toList()));
-//		ud.setPassword(ue.getPassword());
+		//ud.setRoles(ue.getRoles().stream().map(Roles::getRoleName).collect(Collectors.toList()));
+		//ud.setPassword(ue.getPassword());
 		return ud;
 	}
 }
