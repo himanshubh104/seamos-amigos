@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ import com.himansh.seamosamigos.repository.LoginSessionRepository;
 import com.himansh.seamosamigos.repository.PersonalInfoRepository;
 import com.himansh.seamosamigos.repository.RoleRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.CurrentUser;
 
 @Service
@@ -44,6 +44,8 @@ public class UserService implements UserDetailsService{
 	private LoginSessionRepository loginSessionRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private AmigosUtils utils;
 	private Logger log = LoggerFactory.getLogger(UserService.class);
 	
 	private List<Roles> getUserRoles(List<String> roles){
@@ -122,13 +124,13 @@ public class UserService implements UserDetailsService{
 			var timeStamp = d.get(2, Date.class);
 			ipObj.put("ip", ip);
 			ipObj.put("agent", agent);
-			ipObj.put("time_stamp", timeStamp);
+			ipObj.put("time_stamp", utils.dateToString(timeStamp));
 			return ipObj;
 		}).collect(Collectors.toList());
 		return ipList;
 	}
 	
-	public Optional<LoginSession> getLoginDetails(Long loginId) {
-		return loginSessionRepo.findById(loginId);
+	public int getLoginDetails(Long loginId) {
+		return loginSessionRepo.countByLoginId(loginId);
 	}
 }

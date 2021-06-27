@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.himansh.seamosamigos.entity.Photos;
-import com.himansh.seamosamigos.utility.Utilities;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 
 public class PhotoWebModel {
 	private int photoId;
@@ -88,7 +88,7 @@ public class PhotoWebModel {
 		return true;
 	}
 	public static List<PhotoWebModel> findWebModels(List<Photos> set) {
-		Utilities util= new Utilities();
+		AmigosUtils util= new AmigosUtils();
 		return set.stream().map(p->{
 			PhotoWebModel model=new PhotoWebModel();
 			model.setPhotoId(p.getPhotoId());

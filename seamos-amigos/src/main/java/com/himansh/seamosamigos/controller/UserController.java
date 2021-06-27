@@ -25,7 +25,7 @@ import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.UserService;
 import com.himansh.seamosamigos.utility.AmigosConstants;
 import com.himansh.seamosamigos.utility.JwtUtility;
-import com.himansh.seamosamigos.utility.Utilities;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
@@ -35,7 +35,7 @@ public class UserController {
 	@Autowired
 	private JwtUtility jwtUtil;
 	@Autowired
-	private Utilities utilities;
+	private AmigosUtils utilities;
     @Autowired
     private AuthenticationManager authenticationManager;
 	    

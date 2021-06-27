@@ -13,7 +13,7 @@ import com.himansh.seamosamigos.dto.PhotoWebModel;
 import com.himansh.seamosamigos.entity.Photos;
 import com.himansh.seamosamigos.repository.PhotoRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
-import com.himansh.seamosamigos.utility.Utilities;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 
 @Service
 public class PhotoService {
@@ -22,7 +22,7 @@ public class PhotoService {
 	@Autowired
 	private PhotoRepository photoRepository;
 	@Autowired
-	private Utilities utility;
+	private AmigosUtils utility;
 	
 	//Get Profile photos
 	public List<Photos> getUserPhotos(int userid){

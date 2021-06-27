@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.himansh.seamosamigos.entity.Comments;
-import com.himansh.seamosamigos.utility.Utilities;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 
 public class CommentWebModel implements Serializable{ 
 	/**
@@ -140,7 +140,7 @@ public class CommentWebModel implements Serializable{
 	
 	public static CommentWebModel toWebModel(Comments entity) {
 		//System.out.println("I got replyId "+entity.getReplyId());
-		Utilities util= new Utilities();
+		AmigosUtils util= new AmigosUtils();
 		CommentWebModel model=new CommentWebModel();
 		model.setBody(entity.getBody());
 		model.setCommentId(entity.getCommentId());

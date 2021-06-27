@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import eu.bitwalker.useragentutils.UserAgent;
 
 @Component
-public class Utilities {
+public class AmigosUtils {
 	
 	//private final String UPLOADED_FOLDER= "C:\\Users\\Himansh\\Documents\\GIT_Repo\\seamos-amigos\\stored-images\\";
 	
@@ -28,7 +28,7 @@ public class Utilities {
 		return date;
 	}
 	
-	public String dateToString(Date date)throws Exception{
+	public String dateToString(Date date) {
 		String strDate= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(date);
 		return strDate;
 	}

@@ -1,7 +1,6 @@
 package com.himansh.seamosamigos.config;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,13 +16,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.himansh.seamosamigos.entity.LoginSession;
 import com.himansh.seamosamigos.service.UserService;
 import com.himansh.seamosamigos.utility.AmigosConstants;
+import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.CurrentUser;
 import com.himansh.seamosamigos.utility.JwtUtility;
-import com.himansh.seamosamigos.utility.Utilities;
-import org.slf4j.LoggerFactory;
 
 import io.jsonwebtoken.JwtException;
 
@@ -34,7 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
     @Autowired
     private JwtUtility jwtUtil;
 	@Autowired
-	private Utilities utilities;
+	private AmigosUtils utilities;
     
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -54,9 +52,9 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 	        }
 	        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 	        	UserPrincipal userDetails=(UserPrincipal) userDetailsService.loadUserByUsername(username);
-	        	Optional<LoginSession> loginDetails = userDetailsService.getLoginDetails(loginId);
+	        	int loginCounts = userDetailsService.getLoginDetails(loginId);
 	        	
-	        	if (loginDetails.isEmpty()) {
+	        	if (loginCounts == 0) {
 	        		errMessage = AmigosConstants.INVALID_TOKEN+": No active session found!";
 	        	}
 	        	else {
