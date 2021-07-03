@@ -1,9 +1,5 @@
 package com.himansh.seamosamigos.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
 import com.himansh.seamosamigos.entity.Photos;
-import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.PhotoRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
 import com.himansh.seamosamigos.utility.AmigosUtils;
@@ -65,15 +60,6 @@ public class PhotoService {
 			return PhotoDto.generateDto(photoRepository.save(photoEntity));	
 		}
 		return photo;
-	}
-	
-	public byte[] getImage(String picPath) throws InAppException, IOException {
-		try {
-			var picInBytes = Files.readAllBytes(Paths.get(picPath));
-		    return picInBytes;
-		} catch(NoSuchFileException ex) {
-			throw new InAppException("File not found!");
-		}
 	}
 
 }

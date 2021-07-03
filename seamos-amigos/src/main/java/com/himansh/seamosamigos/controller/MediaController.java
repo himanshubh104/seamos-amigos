@@ -1,11 +1,8 @@
 package com.himansh.seamosamigos.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,12 +44,6 @@ public class MediaController {
 		pic.setPicData(null);
 		return pic;
 	}
-	
-	@GetMapping(value = "media/get-photo", produces = MediaType.IMAGE_JPEG_VALUE)
-	public ResponseEntity<byte[]> getImage(@RequestParam String picPath) throws IOException, InAppException {
-	    return ResponseEntity.ok(photoService.getImage(picPath));
-	}
-	
 	@GetMapping(path = "media/photos")
 	public List<Photos> getUserPhotos(){
 		return photoService.getUserPhotos(userId);		

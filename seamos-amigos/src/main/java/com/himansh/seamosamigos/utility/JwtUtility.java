@@ -33,13 +33,13 @@ public class JwtUtility {
         return claimsResolver.apply(claims);
     }
     
-    public Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
     
     public Boolean validateToken(String token, UserDetails userDetails, String requestIp) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) //&& !isTokenExpired(token) 
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) 
         		&& requestIp.equals(extractClaimValue(token, "clientIp")));
     }
     
@@ -50,8 +50,8 @@ public class JwtUtility {
 
 	private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-        		.signWith(SignatureAlgorithm.HS256, AmigosConstants.SECRET_KEY).compact();
-                //.setExpiration(new Date(System.currentTimeMillis() + AmigosConstants.TOKEN_EXPIRY_LIMIT))
+                .setExpiration(new Date(System.currentTimeMillis() + AmigosConstants.TOKEN_EXPIRY_LIMIT))
+                .signWith(SignatureAlgorithm.HS256, AmigosConstants.SECRET_KEY).compact();
     }
 
 }
