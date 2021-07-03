@@ -18,14 +18,16 @@ public class ExceptionController {
 	public ResponseEntity<Map<String, String>> inAppException(InAppException ex){
 		log.info(ex.getMessage());
 		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("type", ex.getClass().getSimpleName());
 		resp.put("message", ex.getMessage());
-		return ResponseEntity.status(200).body(resp);
+		return ResponseEntity.badRequest().body(resp);
 	}
 	
 	@ExceptionHandler(value = UserException.class)
 	public ResponseEntity<Map<String, String>> userException(UserException ex){
 		log.info(ex.getMessage());
 		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("type", ex.getClass().getSimpleName());
 		resp.put("message", ex.getMessage());
 		return ResponseEntity.badRequest().body(resp);
 	}
@@ -34,6 +36,7 @@ public class ExceptionController {
 	public ResponseEntity<Map<String, String>> generalException(Exception ex){
 		log.error(ex.getMessage(), ex);
 		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("type", ex.getClass().getSimpleName());
 		resp.put("message", ex.getMessage());
 		return ResponseEntity.status(500).body(resp);
 	}
