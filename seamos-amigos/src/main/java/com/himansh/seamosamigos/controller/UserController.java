@@ -90,10 +90,6 @@ public class UserController {
 	
 	@GetMapping("users/logout")
 	public ResponseEntity<Object> logoutUser(HttpServletRequest request) {
-		//Object response = true;
-		//if (!userService.logoutUser()) {
-			//response = "No active session found.";
-		//}
 		boolean resp = userService.logoutUser(utilities.extractClientIp(request));
 		return ResponseEntity.ok(resp);
 	}
