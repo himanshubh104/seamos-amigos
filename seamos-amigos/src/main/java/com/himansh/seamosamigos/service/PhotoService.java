@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
@@ -35,24 +36,28 @@ public class PhotoService {
 	}
 	
 	//Get photos in Feeds
+	
 	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){
 		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.findWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
+		return PhotoWebModel.toWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
 	}
 	
+	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
 		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.findWebModels(photoRepository.getAllPotos(userId, pageable));
+		return PhotoWebModel.toWebModels(photoRepository.getAllPotos(userId, pageable));
 	}
 	
 	//Get photos in Feeds
+	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{
 		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.findWebModels(
+		return PhotoWebModel.toWebModels(
 				photoRepository.getAllPotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));	
 	}
 	
 	//Upload a picture
+	@Transactional(readOnly = true)
 	public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception{
 		Integer lastPicId = photoRepository.getMaxPhotoId();
 		lastPicId = lastPicId==null? 0 : lastPicId;

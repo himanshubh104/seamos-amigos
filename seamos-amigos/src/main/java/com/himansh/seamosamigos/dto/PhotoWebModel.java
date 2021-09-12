@@ -2,6 +2,7 @@ package com.himansh.seamosamigos.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.himansh.seamosamigos.entity.Photos;
 import com.himansh.seamosamigos.utility.AmigosUtils;
@@ -43,9 +44,7 @@ public class PhotoWebModel {
 	public void setDateOfUpload(String dateOfUpload) {
 		this.dateOfUpload = dateOfUpload;
 	}
-	
-	
-	
+		
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -87,20 +86,23 @@ public class PhotoWebModel {
 			return false;
 		return true;
 	}
-	public static List<PhotoWebModel> findWebModels(List<Photos> set) {
+
+	public static List<PhotoWebModel> toWebModels(Stream<Photos> picStream) {
 		AmigosUtils util= new AmigosUtils();
-		return set.stream().map(p->{
-			PhotoWebModel model=new PhotoWebModel();
-			model.setPhotoId(p.getPhotoId());
-			model.setCaption(p.getCaption());
-			try {
-				model.setDateOfUpload(util.dateToString(p.getDateOfUpload()));
-			} catch (Exception e) {
-				model.setDateOfUpload(null);
-			}
-			model.setLikes(p.getLikes());
-			model.setUrl(p.getUrl());
-			return model;
-		}).collect(Collectors.toList());
+		try (picStream) {
+			return picStream.map(p->{
+				PhotoWebModel model=new PhotoWebModel();
+				model.setPhotoId(p.getPhotoId());
+				model.setCaption(p.getCaption());
+				try {
+					model.setDateOfUpload(util.dateToString(p.getDateOfUpload()));
+				} catch (Exception e) {
+					model.setDateOfUpload(null);
+				}
+				model.setLikes(p.getLikes());
+				model.setUrl(p.getUrl());
+				return model;
+			}).collect(Collectors.toList());
+		}
 	}
 }
