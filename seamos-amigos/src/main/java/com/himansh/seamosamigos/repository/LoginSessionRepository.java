@@ -1,6 +1,6 @@
 package com.himansh.seamosamigos.repository;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import javax.persistence.Tuple;
 import javax.transaction.Transactional;
@@ -22,6 +22,6 @@ public interface LoginSessionRepository extends JpaRepository<LoginSession, Long
 	int countByLoginId(Long loginId);
 
 	@Query("select ls.userIp as user_ip, ls.userAgent as user_agent, ls.loginTime as login_time from LoginSession ls where ls.userId = :userId")
-	List<Tuple> getUserIpAndAgents(int userId);
+	Stream<Tuple> getUserIpAndAgents(int userId);
 
 }

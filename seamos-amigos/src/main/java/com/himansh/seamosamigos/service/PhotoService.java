@@ -6,6 +6,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +43,8 @@ public class PhotoService {
 	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
 		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.toWebModels(photoRepository.getAllPotos(userId, pageable));
+		Stream<Photos> allPotos = photoRepository.getAllPotos(userId, pageable);
+		return PhotoWebModel.toWebModels(allPotos);
 	}
 	
 	@Transactional(readOnly = true)

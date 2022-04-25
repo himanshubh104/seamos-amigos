@@ -18,7 +18,11 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity(name = "photos")
+@Getter @Setter
 public class Photos {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,44 +43,44 @@ public class Photos {
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Comments> comments;
 	
-	public int getPhotoId() {
-		return photoId;
-	}
-	public void setPhotoId(int photoId) {
-		this.photoId = photoId;
-	}
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getCaption() {
-		return caption;
-	}
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-	public Date getDateOfUpload() {
-		return dateOfUpload;
-	}
-	public void setDateOfUpload(Date dateOfUpload) {
-		this.dateOfUpload = dateOfUpload;
-	}
-	
+//	public int getPhotoId() {
+//		return photoId;
+//	}
+//	public void setPhotoId(int photoId) {
+//		this.photoId = photoId;
+//	}
+//	public String getUrl() {
+//		return url;
+//	}
+//	public void setUrl(String url) {
+//		this.url = url;
+//	}
+//	public String getCaption() {
+//		return caption;
+//	}
+//	public void setCaption(String caption) {
+//		this.caption = caption;
+//	}
+//	public Date getDateOfUpload() {
+//		return dateOfUpload;
+//	}
+//	public void setDateOfUpload(Date dateOfUpload) {
+//		this.dateOfUpload = dateOfUpload;
+//	}
+//	
 	@JsonBackReference
 	public List<User> getUsers() {
 		return users;
 	}
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-	public int getLikes() {
-		return likes;
-	}
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
+//	public void setUsers(List<User> users) {
+//		this.users = users;
+//	}
+//	public int getLikes() {
+//		return likes;
+//	}
+//	public void setLikes(int likes) {
+//		this.likes = likes;
+//	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

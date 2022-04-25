@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
@@ -78,7 +79,7 @@ public class UserService implements UserDetailsService{
 	public long updateActiveSessions(Integer userId, String clientIp, String userAgent) {
 		LoginSession session = loginSessionRepo.getByUserIdAndUserIp(userId, clientIp);
 		if (session != null) {
-			log.info("User already logged in with same IP. Overwritting previois login..");
+			log.info("User already logged in with same IP. Overwritting previous login..");
 			session.setLoginTime(new Date());
 		}
 		else {
@@ -115,9 +116,10 @@ public class UserService implements UserDetailsService{
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Map<String, Object>> getActiveAgentsWithIp(int userId) {
 		var loginDetails = loginSessionRepo.getUserIpAndAgents(userId);
-		var ipList = loginDetails.stream().map(d->{
+		var ipList = loginDetails.map(d->{
 			Map<String, Object> ipObj = new HashMap<>();
 			var ip = d.get(0, String.class);
 			var agent = d.get(1, String.class);
