@@ -34,25 +34,26 @@ import com.himansh.seamosamigos.utility.CurrentUser;
 
 @Service
 public class UserService implements UserDetailsService{
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	@Qualifier("personalInfoRepository")
-	private PersonalInfoRepository infoRepository;
-	@Autowired
-	private RoleRepository roleRepository;
-	@Autowired
-	private LoginSessionRepository loginSessionRepo;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@Autowired
-	private AmigosUtils utils;
-	private Logger log = LoggerFactory.getLogger(UserService.class);
-	
+
+	private final UserRepository userRepository;
+	private final PersonalInfoRepository infoRepository;
+	private final RoleRepository roleRepository;
+	private final LoginSessionRepository loginSessionRepo;
+	private final PasswordEncoder passwordEncoder;
+	private final AmigosUtils utils;
+	private final Logger log = LoggerFactory.getLogger(UserService.class);
+	public UserService(UserRepository userRepository, PersonalInfoRepository infoRepository, RoleRepository roleRepository,
+					   LoginSessionRepository loginSessionRepo, PasswordEncoder passwordEncoder, AmigosUtils utils) {
+		this.userRepository = userRepository;
+		this.infoRepository = infoRepository;
+		this.roleRepository = roleRepository;
+		this.loginSessionRepo = loginSessionRepo;
+		this.passwordEncoder = passwordEncoder;
+		this.utils = utils;
+	}
+
 	private List<Roles> getUserRoles(List<String> roles){
-		return roles.stream().map(r->{
-			return roleRepository.findByRoleName(r);
-		}).collect(Collectors.toList());
+		return roleRepository.findAllByRoleNames(roles);
 	}
 	
 	//Register User
