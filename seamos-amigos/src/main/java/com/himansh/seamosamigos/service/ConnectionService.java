@@ -1,12 +1,5 @@
 package com.himansh.seamosamigos.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.Connections;
 import com.himansh.seamosamigos.entity.FollowRequests;
@@ -15,18 +8,25 @@ import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.ConnectionRepository;
 import com.himansh.seamosamigos.repository.RequestsRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConnectionService {
 
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private ConnectionRepository conRepository;
-	@Autowired
-	private RequestsRepository reqRepository;
-	
-	
+	private final UserRepository userRepository;
+	private final ConnectionRepository conRepository;
+	private final RequestsRepository reqRepository;
+
+	public ConnectionService(UserRepository userRepository, ConnectionRepository conRepository, RequestsRepository reqRepository) {
+		this.userRepository = userRepository;
+		this.conRepository = conRepository;
+		this.reqRepository = reqRepository;
+	}
+
 	private User getUserById(int userId) {
 		return userRepository.findById(userId).get();
 	}

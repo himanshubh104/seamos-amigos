@@ -1,5 +1,17 @@
 package com.himansh.seamosamigos.service;
 
+import com.himansh.seamosamigos.dto.PhotoDto;
+import com.himansh.seamosamigos.dto.PhotoWebModel;
+import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.exception.InAppException;
+import com.himansh.seamosamigos.repository.PhotoRepository;
+import com.himansh.seamosamigos.repository.UserRepository;
+import com.himansh.seamosamigos.utility.AmigosUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -8,29 +20,18 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.himansh.seamosamigos.dto.PhotoDto;
-import com.himansh.seamosamigos.dto.PhotoWebModel;
-import com.himansh.seamosamigos.entity.Photos;
-import com.himansh.seamosamigos.exception.InAppException;
-import com.himansh.seamosamigos.repository.PhotoRepository;
-import com.himansh.seamosamigos.repository.UserRepository;
-import com.himansh.seamosamigos.utility.AmigosUtils;
-
 @Service
 public class PhotoService {
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private PhotoRepository photoRepository;
-	@Autowired
-	private AmigosUtils utility;
-	
+	private final UserRepository userRepository;
+	private final PhotoRepository photoRepository;
+	private final AmigosUtils utility;
+
+	public PhotoService(UserRepository userRepository, PhotoRepository photoRepository, AmigosUtils utility) {
+		this.userRepository = userRepository;
+		this.photoRepository = photoRepository;
+		this.utility = utility;
+	}
+
 	public List<Photos> getUserPhotos(int userid){															// Get Profile photos
 		return photoRepository.getAllProfilePotos(userid);	
 	}

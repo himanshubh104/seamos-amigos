@@ -1,44 +1,39 @@
 package com.himansh.seamosamigos.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.UserService;
 import com.himansh.seamosamigos.utility.AmigosConstants;
-import com.himansh.seamosamigos.utility.JwtUtility;
 import com.himansh.seamosamigos.utility.AmigosUtils;
+import com.himansh.seamosamigos.utility.JwtUtility;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
 public class UserController {
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private JwtUtility jwtUtil;
-	@Autowired
-	private AmigosUtils utilities;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-	    
+	private final UserService userService;
+	private final JwtUtility jwtUtil;
+	private final AmigosUtils utilities;
+    private final AuthenticationManager authenticationManager;
+
+	public UserController(UserService userService, JwtUtility jwtUtil, AmigosUtils utilities, AuthenticationManager authenticationManager) {
+		this.userService = userService;
+		this.jwtUtil = jwtUtil;
+		this.utilities = utilities;
+		this.authenticationManager = authenticationManager;
+	}
+
 	//Register A User
 	@PostMapping(path = "users/register",consumes = "application/JSON")
 	public UserDto addUser(@RequestBody UserDto user) {

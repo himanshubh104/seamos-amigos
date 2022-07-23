@@ -1,24 +1,26 @@
 package com.himansh.seamosamigos.service;
 
+import com.himansh.seamosamigos.dto.CommentWebModel;
+import com.himansh.seamosamigos.entity.Comments;
+import com.himansh.seamosamigos.exception.InAppException;
+import com.himansh.seamosamigos.repository.CommentRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.himansh.seamosamigos.dto.CommentWebModel;
-import com.himansh.seamosamigos.entity.Comments;
-import com.himansh.seamosamigos.exception.InAppException;
-import com.himansh.seamosamigos.repository.CommentRepository;
-
 @Service
 public class CommentAndReplyService {
-	@Autowired
-	private CommentRepository commentRepository;
-	
+
+	private final CommentRepository commentRepository;
+
+	public CommentAndReplyService(CommentRepository commentRepository) {
+		this.commentRepository = commentRepository;
+	}
+
 	public List<CommentWebModel> getAllComments(Integer photoId){
 		return commentRepository.getAllCommentsByPicId(photoId).stream()
 				.map(c->{

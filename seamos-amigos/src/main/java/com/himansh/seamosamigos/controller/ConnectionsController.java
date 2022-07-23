@@ -1,31 +1,29 @@
 package com.himansh.seamosamigos.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.himansh.seamosamigos.dto.RequestDto;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.FollowRequests;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.ConnectionService;
 import com.himansh.seamosamigos.utility.CurrentUser;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/seamos-amigos/")
 public class ConnectionsController {
-	@Autowired
-	private ConnectionService connectionService;
+
+	private final ConnectionService connectionService;
 	private int userId=-1;
-	
-    @ModelAttribute
+
+	public ConnectionsController(ConnectionService connectionService) {
+		this.connectionService = connectionService;
+	}
+
+	@ModelAttribute
     public void fetchUser() {
     	userId = CurrentUser.getCurrentUserId();
     }
