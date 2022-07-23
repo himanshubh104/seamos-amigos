@@ -1,13 +1,13 @@
 package com.himansh.seamosamigos.repository;
 
-import java.util.List;
-import java.util.Set;
-
+import com.himansh.seamosamigos.entity.Comments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.himansh.seamosamigos.entity.Comments;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public interface CommentRepository extends JpaRepository<Comments, Integer> {
 	@Query("from comments c where c.photoId= :picId and c.replyId is NULL")
@@ -18,7 +18,7 @@ public interface CommentRepository extends JpaRepository<Comments, Integer> {
 	
 	@Query(value= "select up.userId from user_photos up where up.photoId= :picId", nativeQuery = true)
 	Set<Integer> findUserIdByPicId(@Param("picId") Integer picId);
-	
-	@Query("select count(lof.userId) from LikesOnFeeds lof where lof.commentId= :commentId")
-	public Integer getTotalLikes(@Param("commentId") Integer commentId);
+
+	@Query("select lof.commentId, count(lof.userId) from LikesOnFeeds lof where lof.commentId in :commentIds group by lof.commentId")
+	Stream<Object[]> getTotalLikesForComments(List<Integer> commentIds);
 }

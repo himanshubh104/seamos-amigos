@@ -5,12 +5,15 @@ import com.himansh.seamosamigos.entity.Comments;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.CommentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CommentAndReplyService {
@@ -21,10 +24,14 @@ public class CommentAndReplyService {
 		this.commentRepository = commentRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<CommentWebModel> getAllComments(Integer photoId){
-		return commentRepository.getAllCommentsByPicId(photoId).stream()
-				.map(c->{
-					c.setLikes(commentRepository.getTotalLikes(c.getCommentId()));
+		List<Comments> comments = commentRepository.getAllCommentsByPicId(photoId);
+		List<Integer> commentIds = comments.stream().map(Comments::getPhotoId).collect(Collectors.toList());
+		Map<Integer, Integer> likesForComment = commentRepository.getTotalLikesForComments(commentIds)
+				.collect(Collectors.toMap(c -> (Integer) c[0], c -> (Integer) c[1], (c1, c2) -> c2));
+		return comments.stream().map(c->{
+					c.setLikes(likesForComment.get(c.getCommentId()));
 					return CommentWebModel.toWebModel(c);
 				}).collect(Collectors.toList());
 	}
