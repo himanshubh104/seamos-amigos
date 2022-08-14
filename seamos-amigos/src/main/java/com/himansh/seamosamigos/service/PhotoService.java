@@ -36,6 +36,7 @@ public class PhotoService {
 		return photoRepository.getAllProfilePotos(userid);	
 	}
 	
+	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){										// Get photos in Feeds
 		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.toWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
