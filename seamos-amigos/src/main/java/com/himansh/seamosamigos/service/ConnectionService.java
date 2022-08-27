@@ -51,6 +51,7 @@ public class ConnectionService {
 		 for(FollowRequests r: ue.getRequests()) {
 			 if (r.getRequestId()==requestId) {
 				request=r;
+				break;
 			}
 		 }
 		 if (request==null) {

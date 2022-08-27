@@ -39,8 +39,8 @@ public class User {
 	private List<FollowRequests> requests;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-    		joinColumns = @JoinColumn(name="user_id"),
-    		inverseJoinColumns = @JoinColumn(name="role_id")
+    		joinColumns = @JoinColumn(name="userId"),
+    		inverseJoinColumns = @JoinColumn(name="roleId")
     		)
     private List<Roles> roles;
     @OneToMany
