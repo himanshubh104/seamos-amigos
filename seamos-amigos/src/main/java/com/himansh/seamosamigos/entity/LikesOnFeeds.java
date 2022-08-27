@@ -11,17 +11,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "likes_on_feeds")
 public class LikesOnFeeds implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer likeId;
 	private Integer feedId;
 	private Integer userId;
-	private Integer commentId;
-	
+	private String feedType;
 	
 	public Integer getLikeId() {
 		return likeId;
@@ -41,11 +38,11 @@ public class LikesOnFeeds implements Serializable {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public Integer getCommentId() {
-		return commentId;
+	public String getFeedType() {
+		return feedType;
 	}
-	public void setCommentId(Integer commentId) {
-		this.commentId = commentId;
+	public void setFeedType(String feedType) {
+		this.feedType = feedType;
 	}
 	
 }
