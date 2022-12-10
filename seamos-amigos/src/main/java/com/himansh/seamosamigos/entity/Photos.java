@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Formula;
 
 @Entity(name = "photos")
 public class Photos {
@@ -25,6 +26,7 @@ public class Photos {
 	private int photoId;
 	private String url;
 	private String caption;
+	@Formula("(select count(1) from like_on_feed lof where lof.feedId = photoId)")
 	private int likes;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfUpload;
