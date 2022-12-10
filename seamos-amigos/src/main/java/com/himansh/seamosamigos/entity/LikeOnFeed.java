@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "likes_on_feeds")
-public class LikesOnFeeds implements Serializable {
+@Table(name = "like_on_feed")
+public class LikeOnFeed implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id

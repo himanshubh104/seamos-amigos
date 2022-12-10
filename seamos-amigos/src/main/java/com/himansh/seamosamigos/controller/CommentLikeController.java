@@ -2,6 +2,7 @@ package com.himansh.seamosamigos.controller;
 
 import java.util.List;
 
+import com.himansh.seamosamigos.service.LikeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +24,13 @@ import com.himansh.seamosamigos.utility.CurrentUser;
 @RequestMapping("api/seamos-amigos/")
 public class CommentLikeController {
 	private final CommentAndReplyService commentService;
+	private final LikeService likeService;
 	private final Logger log = LoggerFactory.getLogger(CommentLikeController.class);
 	private Integer userId = -1;
 
-	public CommentLikeController(CommentAndReplyService commentService) {
+	public CommentLikeController(CommentAndReplyService commentService, LikeService likeService) {
 		this.commentService = commentService;
+		this.likeService = likeService;
 	}
 	
 	@ModelAttribute
@@ -57,6 +60,17 @@ public class CommentLikeController {
 	public String deleteComment(@RequestParam(name = "commentId") Integer commentId) throws Exception{
 		log.info("Request for: media/feed/delete-comment");
 		return commentService.deleteComment(commentId, userId)>0?"Deleted":"Comment Not Deleted";		
+	}
+	@PostMapping(path = "media/feed/give-like")
+	public Integer giveLike(@RequestParam(name = "feedId") Integer feedId, @RequestParam(name = "feedType") String feedType) throws Exception{
+		log.info("Request for: media/feed/give-like");
+		return likeService.addLike(feedId, userId, feedType);
+	}
+
+	@PostMapping(path = "media/feed/disLike")
+	public Long disLike(@RequestParam(name = "feedId") Integer feedId) throws Exception{
+		log.info("Request for: media/feed/disLike");
+		return likeService.disLike(feedId);
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.himansh.seamosamigos.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,11 +26,11 @@ public class CommentAndReplyService {
 	@Transactional(readOnly = true)
 	public List<CommentWebModel> getAllComments(Integer photoId){
 		List<Comments> comments = commentRepository.getAllCommentsByPicId(photoId);
-		List<Integer> commentIds = comments.stream().map(Comments::getPhotoId).collect(Collectors.toList());
-		Map<Integer, Integer> likesForComment = commentRepository.getTotalLikesForComments(commentIds)
-				.collect(Collectors.toMap(c -> (Integer) c[0], c -> (Integer) c[1], (c1, c2) -> c2));
+		//List<Integer> commentIds = comments.stream().map(Comments::getPhotoId).collect(Collectors.toList());
+		//var likesForComment = commentRepository.getTotalLikesForComments(commentIds)
+		//		.collect(Collectors.toMap(c -> (Integer) c[0], c -> (Integer) c[1], (c1, c2) -> c2));
 		return comments.stream().map(c->{
-					c.setLikes(likesForComment.get(c.getCommentId()));
+					//c.setLikes(likesForComment.get(c.getCommentId()));
 					return CommentWebModel.toWebModel(c);
 				}).collect(Collectors.toList());
 	}

@@ -27,9 +27,6 @@ public interface PhotoRepository extends PagingAndSortingRepository<Photos, Inte
 	@Query("select distinct p from photos p join p.users u where u.userId in"
 			+ "(select c.user2.userId from connections c where c.user1.userId=:userId) and p.photoId < :picId order by p.dateOfUpload desc")
 	Stream<Photos> getAllPotosByPhotoId(@Param("userId") int userId,@Param("picId") Integer picId, Pageable pageable);
-
-	@Query("select count(lof.userId) from LikesOnFeeds lof where lof.feedId= :picId")
-	public Integer getTotalLikes(@Param("picId") Integer picId);
 	
 	@Query("select max(p.photoId) from photos p")
 	Integer getMaxPhotoId();
