@@ -73,4 +73,10 @@ public class CommentLikeController {
 		return likeService.disLike(feedId);
 	}
 
+	@GetMapping(path = "media/feed/have-user-like")
+	public Boolean haveUserLiked(@RequestParam(name = "feedId") Integer feedId) throws Exception{
+		log.info("Request for: media/feed/have-user-like");
+		return likeService.haveUserLiked(feedId, userId);
+	}
+
 }
