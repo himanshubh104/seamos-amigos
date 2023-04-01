@@ -29,10 +29,8 @@ public class CommentAndReplyService {
 		//List<Integer> commentIds = comments.stream().map(Comments::getPhotoId).collect(Collectors.toList());
 		//var likesForComment = commentRepository.getTotalLikesForComments(commentIds)
 		//		.collect(Collectors.toMap(c -> (Integer) c[0], c -> (Integer) c[1], (c1, c2) -> c2));
-		return comments.stream().map(c->{
-					//c.setLikes(likesForComment.get(c.getCommentId()));
-					return CommentWebModel.toWebModel(c);
-				}).collect(Collectors.toList());
+		//c.setLikes(likesForComment.get(c.getCommentId()));
+		return comments.stream().map(CommentWebModel::toWebModel).collect(Collectors.toList());
 	}
 	
 	public CommentWebModel saveComment(CommentWebModel commentWebModel, int userId) {
@@ -83,12 +81,9 @@ public class CommentAndReplyService {
 			if (userId != updatesOnComent.getUserId()) {
 				throw new InAppException("User not allowed to update");
 			}
-			//Integer likes= commentWebModel.getLikes();
 			String message= commentWebModel.getBody();
 			if(!StringUtils.isEmpty(message))
 				updatesOnComent.setBody(commentWebModel.getBody());
-			//else if(!StringUtils.isEmpty(likes+""))
-			//	updatesOnComent.setLikes(commentWebModel.getLikes());
 			else
 				throw new InAppException("comment is empty");
 			updatesOnComent= commentRepository.saveAndFlush(updatesOnComent);

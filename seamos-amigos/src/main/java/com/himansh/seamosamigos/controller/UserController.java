@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,14 +46,15 @@ public class UserController {
 	public Map<String,Object> loginUser(@RequestBody UserDto user,
 			@RequestParam(required = false) String forceLoginClienIp,
 			HttpServletRequest request) throws InAppException {
+		Authentication authenticate = null;
 		try {
-    		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+			authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 		} catch (BadCredentialsException e) {
 			throw new UsernameNotFoundException("Incorrect Username or Password",e);
 		}
 		String clientIp= utilities.extractClientIp(request);
 		String userAgent = utilities.extractClientUserAgent(request);
-		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
+		UserPrincipal userPrincipal=(UserPrincipal) authenticate.getPrincipal();
 		if (forceLoginClienIp != null) {
 			userService.forceLogout(userPrincipal.getUserId(), forceLoginClienIp);
 		}
@@ -74,12 +76,13 @@ public class UserController {
 	
 	@PostMapping(path = "users/get-active-user-agents",consumes = "application/JSON")
 	public List<Map<String, Object>> getActiveAgentsWithIp(@RequestBody UserDto user, HttpServletRequest request) throws InAppException {
+		Authentication authenticate = null;
 		try {
-    		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+			authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 		} catch (BadCredentialsException e) {
 			throw new UsernameNotFoundException("Incorrect Username or Password",e);
 		}
-		UserPrincipal userPrincipal=(UserPrincipal) userService.loadUserByUsername(user.getEmail());
+		UserPrincipal userPrincipal=(UserPrincipal) authenticate.getPrincipal();
 		return userService.getActiveAgentsWithIp(userPrincipal.getUserId());
 	}
 	

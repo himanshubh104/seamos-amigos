@@ -34,4 +34,9 @@ public class LikeService {
         likeRepository.deleteByFeedId(feedId);
         return likeRepository.getTotalLikes(feedId);
     }
+
+    public Boolean haveUserLiked(Integer feedId, Integer userId) {
+        Integer isLiked = likeRepository.isLikedAlready(feedId, userId);
+        return isLiked>0;
+    }
 }
