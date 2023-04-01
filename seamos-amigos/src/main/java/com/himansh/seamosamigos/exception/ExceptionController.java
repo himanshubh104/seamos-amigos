@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,6 +32,14 @@ public class ExceptionController {
 		resp.put("type", ex.getClass().getSimpleName());
 		resp.put("message", ex.getMessage());
 		return ResponseEntity.badRequest().body(resp);
+	}
+	@ExceptionHandler(value = UsernameNotFoundException.class)
+	public ResponseEntity<Map<String, String>> userException(UsernameNotFoundException ex){
+		log.info(ex.getMessage());
+		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("type", ex.getClass().getSimpleName());
+		resp.put("message", ex.getMessage());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resp);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
