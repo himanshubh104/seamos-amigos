@@ -12,10 +12,10 @@ public class Connections {
 	@Column(name = "connection_id")
 	private int connectionId;
 	@ManyToOne
-	@JoinColumn(name = "user1_id")
+	@JoinColumn(name = "follower_id")
 	private User user1;
 	@ManyToOne
-	@JoinColumn(name = "user2_id")
+	@JoinColumn(name = "following_id")
 	private User user2;
 	
 	@JsonManagedReference
