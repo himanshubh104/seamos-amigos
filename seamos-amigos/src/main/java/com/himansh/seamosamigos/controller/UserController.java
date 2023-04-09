@@ -55,13 +55,7 @@ public class UserController {
 		String clientIp= utilities.extractClientIp(request);
 		String userAgent = utilities.extractClientUserAgent(request);
 		UserPrincipal userPrincipal=(UserPrincipal) authenticate.getPrincipal();
-		if (forceLoginClienIp != null) {
-			userService.forceLogout(userPrincipal.getUserId(), forceLoginClienIp);
-		}
-		else if (userPrincipal.getActiveSessions() >= AmigosConstants.MAX_ACTIVE_SEESIONS) {
-			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
-		}
-		long loginId = userService.updateActiveSessions(userPrincipal.getUserId(), clientIp, userAgent);
+		long loginId = userService.initUserLogin(userPrincipal, clientIp, userAgent, forceLoginClienIp);
 		Map<String, Object> claims = new HashMap<>();
         claims.put("clientIp", clientIp);
         claims.put("loginId", loginId);
