@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.himansh.seamosamigos.exception.InAppException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +47,8 @@ public class AmigosUtils {
 	        	case "image/png":
 	        		fileType = "PNG";
 	        		break;
+				default:
+	        		throw new InAppException("File is not an image.");
 	        }
 	        Path path = Paths.get(AmigosConstants.MEDIA_FOLDER + "IMG"+(lastPicId+1)+"-"+userId+"."+fileType);
 	        return Files.write(path, bytes).toString();

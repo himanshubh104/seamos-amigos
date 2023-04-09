@@ -6,10 +6,12 @@ import com.himansh.seamosamigos.entity.LoginSession;
 import com.himansh.seamosamigos.entity.PersonalInfoEntity;
 import com.himansh.seamosamigos.entity.Roles;
 import com.himansh.seamosamigos.entity.User;
+import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.LoginSessionRepository;
 import com.himansh.seamosamigos.repository.PersonalInfoRepository;
 import com.himansh.seamosamigos.repository.RoleRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
+import com.himansh.seamosamigos.utility.AmigosConstants;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.CurrentUser;
 import org.slf4j.Logger;
@@ -58,7 +60,7 @@ public class UserService implements UserDetailsService{
 	public UserDto addUser(User user, List<String> roles) {
 		user.setRoles(getUserRoles(roles));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return UserDto.generateDto(userRepository.saveAndFlush(user));	
+		return UserDto.generateDto(userRepository.save(user));
 	}
 	
 	public PersonalInfoEntity getUserInfo(int userId) {
@@ -133,5 +135,16 @@ public class UserService implements UserDetailsService{
 	
 	public int getLoginDetails(Long loginId) {
 		return loginSessionRepo.countByLoginId(loginId);
+	}
+
+	@javax.transaction.Transactional
+	public long initUserLogin(UserPrincipal userPrincipal, String clientIp, String userAgent, String forceLoginClienIp) throws InAppException {
+		if (forceLoginClienIp != null) {
+			forceLogout(userPrincipal.getUserId(), forceLoginClienIp);
+		}
+		else if (userPrincipal.getActiveSessions() >= AmigosConstants.MAX_ACTIVE_SEESIONS) {
+			throw new InAppException(AmigosConstants.LOGIN_ERROR+": User already logged in with: "+userPrincipal.getActiveSessions()+" active sessions.");
+		}
+		return updateActiveSessions(userPrincipal.getUserId(), clientIp, userAgent);
 	}
 }
