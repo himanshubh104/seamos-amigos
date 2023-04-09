@@ -10,8 +10,9 @@ import javax.persistence.Id;
 public class Roles {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "role_id")
 	private int roleId;
-	@Column(unique = true)
+	@Column(name = "role_name", unique = true)
 	private String roleName;
 	
 	public int getRoleId() {

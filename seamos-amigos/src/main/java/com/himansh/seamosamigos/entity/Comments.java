@@ -5,31 +5,31 @@ import org.hibernate.annotations.Formula;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity(name = "comments")
 public class Comments {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "comment_id")
 	private Integer commentId;
 	private String body;
-	@Formula("(select count(1) from like_on_feed lof where lof.feedId = commentId)")
+	@Formula("(select count(1) from like_on_feed lof where lof.feed_id = comment_id)")
 	private Integer likes;
+
+	@Column(name = "user_id")
 	private Integer userId;
+
+	@Column(name = "photo_id")
 	private Integer photoId;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timeStamp;
+	private Date timestamp;
+
+	@Column(name = "reply_id")
 	private Integer replyId;
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "replyId")
+	@JoinColumn(name = "reply_id")
 	private Set<Comments> replies;
 	
 	
@@ -39,11 +39,11 @@ public class Comments {
 	public void setReplyId(Integer replyId) {
 		this.replyId = replyId;
 	}
-	public Date getTimeStamp() {
-		return timeStamp;
+	public Date getTimestamp() {
+		return timestamp;
 	}
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 	public Integer getUserId() {
 		return userId;

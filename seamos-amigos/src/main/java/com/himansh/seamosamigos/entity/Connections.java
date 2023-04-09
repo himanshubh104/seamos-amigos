@@ -1,11 +1,6 @@
 package com.himansh.seamosamigos.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -14,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Connections {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "connection_id")
 	private int connectionId;
 	@ManyToOne
 	@JoinColumn(name = "user1_id")

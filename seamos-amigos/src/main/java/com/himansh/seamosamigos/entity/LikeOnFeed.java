@@ -2,11 +2,7 @@ package com.himansh.seamosamigos.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "like_on_feed")
@@ -15,9 +11,16 @@ public class LikeOnFeed implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "like_id")
 	private Integer likeId;
+
+	@Column(name = "feed_id")
 	private Integer feedId;
+
+	@Column(name = "user_id")
 	private Integer userId;
+
+	@Column(name = "feed_type")
 	private String feedType;
 	
 	public Integer getLikeId() {
