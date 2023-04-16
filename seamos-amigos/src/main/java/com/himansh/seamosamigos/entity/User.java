@@ -30,7 +30,7 @@ public class User {
 	@Column(unique = true, nullable = false,length = 100)
 	private String email;
 	@ManyToMany(mappedBy = "users")
-	private List<Photos> photos;
+	private List<Photo> photos;
 	
 	@OneToMany(mappedBy = "user1")
 	private List<Connections> connections;
@@ -74,10 +74,10 @@ public class User {
 		this.connections = connections;
 	}
 	@JsonBackReference
-	public List<Photos> getPhotos() {
+	public List<Photo> getPhotos() {
 		return photos;
 	}
-	public void setPhotos(List<Photos> photos) {
+	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
 	public int getUserId() {

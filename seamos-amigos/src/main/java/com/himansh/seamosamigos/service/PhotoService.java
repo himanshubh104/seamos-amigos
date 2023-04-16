@@ -2,7 +2,7 @@ package com.himansh.seamosamigos.service;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
-import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.entity.Photo;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.PhotoRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
@@ -32,7 +32,7 @@ public class PhotoService {
 		this.utility = utility;
 	}
 
-	public List<Photos> getUserPhotos(int userid){															// Get Profile photos
+	public List<Photo> getUserPhotos(int userid){															// Get Profile photos
 		return photoRepository.getAllProfilePotos(userid);	
 	}
 	
@@ -45,7 +45,7 @@ public class PhotoService {
 	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
 		Pageable pageable= PageRequest.of(0, 10);
-		Stream<Photos> allPotos = photoRepository.getAllPotos(userId, pageable);
+		Stream<Photo> allPotos = photoRepository.getAllPotos(userId, pageable);
 		return PhotoWebModel.toWebModels(allPotos);
 	}
 	
@@ -61,7 +61,7 @@ public class PhotoService {
 		lastPicId = lastPicId==null? 0 : lastPicId;
 		String uri=utility.saveUploadedFile(photo.getPicData(), userId, lastPicId);
 		if (uri!=null) {
-			Photos photoEntity=photo.generatePhotoEntity();
+			Photo photoEntity=photo.generatePhotoEntity();
 			photoEntity.setUrl(uri);
 			photoEntity.setDateOfUpload(Calendar.getInstance().getTime());
 			photoEntity.setUsers(userRepository.getListOfUsers(new int[]{userId}));

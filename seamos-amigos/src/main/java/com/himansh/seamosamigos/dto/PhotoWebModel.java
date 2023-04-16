@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.entity.Photo;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 
 public class PhotoWebModel {
@@ -87,7 +87,7 @@ public class PhotoWebModel {
 		return true;
 	}
 
-	public static List<PhotoWebModel> toWebModels(Stream<Photos> picStream) {
+	public static List<PhotoWebModel> toWebModels(Stream<Photo> picStream) {
 		AmigosUtils util= new AmigosUtils();
 		try (picStream) {
 			return picStream.map(p->{

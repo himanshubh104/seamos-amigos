@@ -3,7 +3,7 @@ package com.himansh.seamosamigos.service;
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.entity.LoginSession;
-import com.himansh.seamosamigos.entity.PersonalInfoEntity;
+import com.himansh.seamosamigos.entity.PersonalInfo;
 import com.himansh.seamosamigos.entity.Roles;
 import com.himansh.seamosamigos.entity.User;
 import com.himansh.seamosamigos.exception.InAppException;
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService{
 		return UserDto.generateDto(userRepository.save(user));
 	}
 	
-	public PersonalInfoEntity getUserInfo(int userId) {
+	public PersonalInfo getUserInfo(int userId) {
 		return infoRepository.findById(userId).get();
 	}
 

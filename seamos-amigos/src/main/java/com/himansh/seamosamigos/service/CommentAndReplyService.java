@@ -5,12 +5,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.himansh.seamosamigos.entity.Comment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.himansh.seamosamigos.dto.CommentWebModel;
-import com.himansh.seamosamigos.entity.Comments;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.repository.CommentRepository;
 
@@ -25,8 +25,8 @@ public class CommentAndReplyService {
 
 	@Transactional(readOnly = true)
 	public List<CommentWebModel> getAllComments(Integer photoId){
-		List<Comments> comments = commentRepository.getAllCommentsByPicId(photoId);
-		//List<Integer> commentIds = comments.stream().map(Comments::getPhotoId).collect(Collectors.toList());
+		List<Comment> comments = commentRepository.getAllCommentsByPicId(photoId);
+		//List<Integer> commentIds = comments.stream().map(Comment::getPhotoId).collect(Collectors.toList());
 		//var likesForComment = commentRepository.getTotalLikesForComments(commentIds)
 		//		.collect(Collectors.toMap(c -> (Integer) c[0], c -> (Integer) c[1], (c1, c2) -> c2));
 		//c.setLikes(likesForComment.get(c.getCommentId()));
@@ -37,24 +37,24 @@ public class CommentAndReplyService {
 		commentWebModel.setUserId(userId);
 		if (commentWebModel.getCommentId()!=null && commentWebModel.getCommentId()!=0) {
 			//commentWebModel.setPhotoId(null);
-			Optional<Comments> comment= commentRepository.findById(commentWebModel.getCommentId());
+			Optional<Comment> comment= commentRepository.findById(commentWebModel.getCommentId());
 			if (comment.isPresent()) {
-				Set<Comments> replies=comment.get().getReplies();
+				Set<Comment> replies=comment.get().getReplies();
 				replies.add(commentWebModel.toEntity());
-				Comments entity= comment.get();
+				Comment entity= comment.get();
 				entity.setReplies(replies);
 				entity=commentRepository.saveAndFlush(entity);
 				return CommentWebModel.toWebModel(entity);
 			}
 		}
-		Comments comment= commentRepository.saveAndFlush(commentWebModel.toEntity());
+		Comment comment= commentRepository.saveAndFlush(commentWebModel.toEntity());
 		return CommentWebModel.toWebModel(comment);
 	}
 	
 	public Integer deleteComment(Integer commentId, Integer userId) {
-		Optional<Comments> comment= commentRepository.findById(commentId);
+		Optional<Comment> comment= commentRepository.findById(commentId);
 		if(comment.isPresent()) {
-			Comments delComment= comment.get();
+			Comment delComment= comment.get();
 			boolean flag= false;
 			if (userId == delComment.getUserId()) {
 				flag= true;
@@ -75,9 +75,9 @@ public class CommentAndReplyService {
 
 	public Object updateComment(CommentWebModel commentWebModel, Integer userId) throws InAppException {
 		Integer commentId= commentWebModel.getCommentId();
-		Optional<Comments> comment= commentRepository.findById(commentId);
+		Optional<Comment> comment= commentRepository.findById(commentId);
 		if (comment.isPresent()) {
-			Comments updatesOnComent = comment.get();
+			Comment updatesOnComent = comment.get();
 			if (userId != updatesOnComent.getUserId()) {
 				throw new InAppException("User not allowed to update");
 			}
