@@ -3,7 +3,7 @@ package com.himansh.seamosamigos.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.entity.Photo;
 
 public class PhotoDto {
 	private int photoId;
@@ -44,13 +44,13 @@ public class PhotoDto {
 		this.userId = userId;
 	}
 	
-	public Photos generatePhotoEntity() {
-		Photos photo =new Photos();
+	public Photo generatePhotoEntity() {
+		Photo photo =new Photo();
 		photo.setCaption(caption);
 		return photo;
 	}
 	
-	public static PhotoDto generateDto(Photos photo) {
+	public static PhotoDto generateDto(Photo photo) {
 		PhotoDto dto=new PhotoDto();
 		dto.setCaption(photo.getCaption());
 		dto.setUrl(photo.getUrl());

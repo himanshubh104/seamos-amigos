@@ -16,7 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity(name = "comments")
-public class Comments {
+public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer commentId;
@@ -30,7 +30,7 @@ public class Comments {
 	private Integer replyId;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "replyId")
-	private Set<Comments> replies;
+	private Set<Comment> replies;
 	
 	
 	public Integer getReplyId() {
@@ -51,10 +51,10 @@ public class Comments {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public Set<Comments> getReplies() {
+	public Set<Comment> getReplies() {
 		return replies;
 	}
-	public void setReplies(Set<Comments> replies) {
+	public void setReplies(Set<Comment> replies) {
 		this.replies = replies;
 	}
 	public Integer getCommentId() {
@@ -102,7 +102,7 @@ public class Comments {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Comments other = (Comments) obj;
+		Comment other = (Comment) obj;
 		if (body == null) {
 			if (other.body != null)
 				return false;
