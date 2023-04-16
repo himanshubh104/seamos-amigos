@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Formula;
 
 @Entity(name = "photos")
-public class Photos {
+public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "photo_id")
@@ -31,7 +31,7 @@ public class Photos {
 			)
 	private List<User> users;
 	@OneToMany(cascade = CascadeType.ALL)
-	private Set<Comments> comments;
+	private Set<Comment> comments;
 	
 	public int getPhotoId() {
 		return photoId;
@@ -92,7 +92,7 @@ public class Photos {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Photos other = (Photos) obj;
+		Photo other = (Photo) obj;
 		if (caption == null) {
 			if (other.caption != null)
 				return false;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himansh.seamosamigos.dto.PhotoDto;
 import com.himansh.seamosamigos.dto.PhotoWebModel;
-import com.himansh.seamosamigos.entity.Photos;
+import com.himansh.seamosamigos.entity.Photo;
 import com.himansh.seamosamigos.exception.InAppException;
 import com.himansh.seamosamigos.service.PhotoService;
 import com.himansh.seamosamigos.utility.CurrentUser;
@@ -48,7 +48,7 @@ public class MediaController {
 	}
 	
 	@GetMapping(path = "media/photos")
-	public List<Photos> getUserPhotos(){
+	public List<Photo> getUserPhotos(){
 		return photoService.getUserPhotos(userId);		
 	}
 	@GetMapping(path = "media/v2/feeds/photos")

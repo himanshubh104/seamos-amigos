@@ -1,6 +1,6 @@
 package com.himansh.seamosamigos.repository;
 
-import com.himansh.seamosamigos.entity.Comments;
+import com.himansh.seamosamigos.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public interface CommentRepository extends JpaRepository<Comments, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	@Query("from comments c where c.photoId= :picId and c.replyId is NULL")
-	List<Comments> getAllCommentsByPicId(@Param("picId") Integer picId);
+	List<Comment> getAllCommentsByPicId(@Param("picId") Integer picId);
 	
 //	@Query("select u.userId from comments c, users u where u.userId=c.userId and c.photoId= :picId")
 //	Set<Integer> findUserIdByPicId(@Param("picId") Integer picId);

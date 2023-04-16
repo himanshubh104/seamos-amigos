@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.himansh.seamosamigos.entity.Comments;
+import com.himansh.seamosamigos.entity.Comment;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 
 public class CommentWebModel implements Serializable{ 
@@ -127,8 +127,8 @@ public class CommentWebModel implements Serializable{
 		return true;
 	}
 	
-	public Comments toEntity() {
-		Comments comment=new Comments();
+	public Comment toEntity() {
+		Comment comment=new Comment();
 		comment.setBody(body);
 		comment.setLikes(likes);
 		if(photoId!=null && photoId!=0)
@@ -138,7 +138,7 @@ public class CommentWebModel implements Serializable{
 		return comment;
 	}
 	
-	public static CommentWebModel toWebModel(Comments entity) {
+	public static CommentWebModel toWebModel(Comment entity) {
 		//System.out.println("I got replyId "+entity.getReplyId());
 		AmigosUtils util= new AmigosUtils();
 		CommentWebModel model=new CommentWebModel();
