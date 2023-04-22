@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-	@Query("from comments c where c.photoId= :picId and c.replyId is NULL")
+	@Query("from Comment c where c.photoId= :picId and c.replyId is NULL")
 	List<Comment> getAllCommentsByPicId(@Param("picId") Integer picId);
 	
-//	@Query("select u.userId from comments c, users u where u.userId=c.userId and c.photoId= :picId")
+//	@Query("select u.userId from Comment c, users u where u.userId=c.userId and c.photoId= :picId")
 //	Set<Integer> findUserIdByPicId(@Param("picId") Integer picId);
 	
 	@Query(value= "select up.userId from user_photos up where up.photoId= :picId", nativeQuery = true)
