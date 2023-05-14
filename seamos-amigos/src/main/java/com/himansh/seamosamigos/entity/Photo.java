@@ -17,7 +17,7 @@ public class Photo {
 	private int photoId;
 	private String url;
 	private String caption;
-	@Formula("(select count(1) from like_on_feed lof where lof.feedId = photoId)")
+	// @Formula("(select count(1) from like_on_feed lof where lof.feedId = photoId)")
 	private int likes;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfUpload;
