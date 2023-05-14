@@ -14,7 +14,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer commentId;
 	private String body;
-	@Formula("(select count(1) from like_on_feed lof where lof.feedId = commentId)")
+	// @Formula("(select count(1) from like_on_feed lof where lof.feedId = commentId)")
 	private Integer likes;
 	private Integer userId;
 	private Integer photoId;

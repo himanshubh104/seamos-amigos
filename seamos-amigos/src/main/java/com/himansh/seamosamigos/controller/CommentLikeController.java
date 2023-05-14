@@ -68,9 +68,9 @@ public class CommentLikeController {
 	}
 
 	@PostMapping(path = "media/feed/disLike")
-	public Long disLike(@RequestParam(name = "feedId") Integer feedId) throws Exception{
+	public Long disLike(@RequestParam(name = "feedId") Integer feedId, @RequestParam(name = "feedType") String feedType) throws Exception{
 		log.info("Request for: media/feed/disLike");
-		return likeService.disLike(feedId);
+		return likeService.disLike(feedId, feedType);
 	}
 
 	@GetMapping(path = "media/feed/have-user-like")

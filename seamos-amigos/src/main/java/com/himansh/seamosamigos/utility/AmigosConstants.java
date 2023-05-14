@@ -8,4 +8,8 @@ public class AmigosConstants {
 	
 	public static final String LOGIN_ERROR = "Unable to login";
 	public static final String INVALID_TOKEN = "Invalid token";
+
+	/* --- Feed Types --- */
+	public static final String IMAGE = "IMAGE";
+	public static final String COMMENT = "COMMENT";
 }
