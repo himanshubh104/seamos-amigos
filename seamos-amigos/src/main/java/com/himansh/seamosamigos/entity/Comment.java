@@ -15,7 +15,7 @@ public class Comment {
 	@Column(name = "comment_id")
 	private Integer commentId;
 	private String body;
-	@Formula("(select count(1) from like_on_feed lof where lof.feed_id = comment_id)")
+	// @Formula("(select count(1) from like_on_feed lof where lof.feed_id = comment_id)")
 	private Integer likes;
 
 	@Column(name = "user_id")
