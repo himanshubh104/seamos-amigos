@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 //	@Query("select u.userId from Comment c, users u where u.userId=c.userId and c.photoId= :picId")
 //	Set<Integer> findUserIdByPicId(@Param("picId") Integer picId);
 	
-	@Query(value= "select up.userId from user_photos up where up.photoId= :picId", nativeQuery = true)
+	@Query(value= "select up.userId from user_photos up where up.photo_id= :picId", nativeQuery = true)
 	Set<Integer> findUserIdByPicId(@Param("picId") Integer picId);
 
 	@Query("select lof.feedId, count(lof.likeId) from LikeOnFeed lof "

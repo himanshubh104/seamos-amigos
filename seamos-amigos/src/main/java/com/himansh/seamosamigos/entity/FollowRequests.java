@@ -1,11 +1,6 @@
 package com.himansh.seamosamigos.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -13,12 +8,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class FollowRequests {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "request_id")
 	private int requestId;
 	@ManyToOne
-	@JoinColumn(name = "requestedUser")
+	@JoinColumn(name = "requested_user")
 	private User requestedUser;
 	@ManyToOne
-	@JoinColumn(name = "requestingUser")
+	@JoinColumn(name = "requesting_user")
 	private User requestingUser;
 	public int getRequestId() {
 		return requestId;

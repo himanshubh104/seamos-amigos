@@ -33,19 +33,19 @@ public class PhotoService {
 	}
 
 	public List<Photo> getUserPhotos(int userid){															// Get Profile photos
-		return photoRepository.getAllProfilePotos(userid);	
+		return photoRepository.getAllProfilePhotos(userid);
 	}
 	
 	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){										// Get photos in Feeds
 		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.toWebModels(photoRepository.getAllPotosByPhotoId(userid, picId, pageable));	
+		return PhotoWebModel.toWebModels(photoRepository.getAllPhotosByPhotoId(userid, picId, pageable));
 	}
 	
 	@Transactional(readOnly = true)
 	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
 		Pageable pageable= PageRequest.of(0, 10);
-		Stream<Photo> allPotos = photoRepository.getAllPotos(userId, pageable);
+		Stream<Photo> allPotos = photoRepository.getAllPhotos(userId, pageable);
 		return PhotoWebModel.toWebModels(allPotos);
 	}
 	
@@ -53,7 +53,7 @@ public class PhotoService {
 	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{			// Get photos in Feeds.
 		Pageable pageable= PageRequest.of(0, 10);
 		return PhotoWebModel.toWebModels(
-				photoRepository.getAllPotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));	
+				photoRepository.getAllPhotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));
 	}
 	
 	public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception{								// Upload a picture

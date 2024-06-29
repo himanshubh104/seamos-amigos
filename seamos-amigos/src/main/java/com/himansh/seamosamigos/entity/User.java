@@ -22,10 +22,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id", updatable = true)
 	private int userId;
+
+	@Column(name = "first_name")
 	private String firstName;
+
+	@Column(name = "last_name")
 	private String lastName;
+
 	private String password;
+	@Column(name = "active_sessions")
 	private int activeSessions;
 	@Column(unique = true, nullable = false,length = 100)
 	private String email;
@@ -34,13 +41,13 @@ public class User {
 	
 	@OneToMany(mappedBy = "user1")
 	private List<Connections> connections;
-	
+
 	@OneToMany(mappedBy = "requestedUser")
 	private List<FollowRequests> requests;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-    		joinColumns = @JoinColumn(name="userId"),
-    		inverseJoinColumns = @JoinColumn(name="roleId")
+    		joinColumns = @JoinColumn(name="user_id"),
+    		inverseJoinColumns = @JoinColumn(name="role_id")
     		)
     private List<Roles> roles;
     @OneToMany
