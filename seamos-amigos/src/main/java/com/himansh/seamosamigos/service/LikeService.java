@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static com.himansh.seamosamigos.utility.AmigosConstants.COMMENT;
-import static com.himansh.seamosamigos.utility.AmigosConstants.IMAGE;
+import static com.himansh.seamosamigos.Constants.AmigosConstants.COMMENT;
+import static com.himansh.seamosamigos.Constants.AmigosConstants.IMAGE;
 
 @Service
 public class LikeService {

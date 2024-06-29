@@ -24,6 +24,15 @@ public class ExceptionController {
 		resp.put("message", ex.getMessage());
 		return ResponseEntity.badRequest().body(resp);
 	}
+
+	@ExceptionHandler(value = ValidationException.class)
+	public ResponseEntity<Map<String, String>> validationExceptions(ValidationException ex){
+		log.info(ex.getMessage());
+		HashMap<String, String> resp=new HashMap<String, String>();
+		resp.put("type", ex.getClass().getSimpleName());
+		resp.put("message", ex.getMessage());
+		return ResponseEntity.badRequest().body(resp);
+	}
 	
 	@ExceptionHandler(value = UserException.class)
 	public ResponseEntity<Map<String, String>> userException(UserException ex){

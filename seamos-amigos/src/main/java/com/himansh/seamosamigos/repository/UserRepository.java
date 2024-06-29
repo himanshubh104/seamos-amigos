@@ -13,19 +13,19 @@ import com.himansh.seamosamigos.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
-	public User findByEmail(String email);
+	User findByEmail(String email);
 	
 	@Query("from User u where u.userId in :userIds")
-	public List<User> getListOfUsers(@Param("userIds") int[] userIds);
+	List<User> getListOfUsers(@Param("userIds") int[] userIds);
 	
 //	@Query("from User u where u.userId in(select c.user2Id from connection c where c.user1.userId=:userid)")
 //	public List<UserEntity> getConnectionList(@Param("userid") int userid);
 	
 	@Query("select c.user2 from connections c where c.user1.userId=:userid")
-	public List<User> getFollowers(@Param("userid") int userid);
+	List<User> getFollowers(@Param("userid") int userid);
 	
 	@Query("select c.user1 from connections c where c.user2.userId=:userid")
-	public List<User> getFollowings(@Param("userid") int userid);
+	List<User> getFollowings(@Param("userid") int userid);
 	
 	@Transactional
 	@Modifying

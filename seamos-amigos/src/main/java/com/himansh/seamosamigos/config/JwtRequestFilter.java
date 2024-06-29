@@ -1,7 +1,7 @@
 package com.himansh.seamosamigos.config;
 
 import com.himansh.seamosamigos.service.UserService;
-import com.himansh.seamosamigos.utility.AmigosConstants;
+import com.himansh.seamosamigos.Constants.AmigosConstants;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.CurrentUser;
 import com.himansh.seamosamigos.utility.JwtUtility;

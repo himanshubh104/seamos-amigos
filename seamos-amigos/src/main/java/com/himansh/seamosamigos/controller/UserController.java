@@ -3,8 +3,8 @@ package com.himansh.seamosamigos.controller;
 import com.himansh.seamosamigos.config.UserPrincipal;
 import com.himansh.seamosamigos.dto.UserDto;
 import com.himansh.seamosamigos.exception.InAppException;
+import com.himansh.seamosamigos.exception.ValidationException;
 import com.himansh.seamosamigos.service.UserService;
-import com.himansh.seamosamigos.utility.AmigosConstants;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.JwtUtility;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class UserController {
 
 	//Register A User
 	@PostMapping(path = "users/register",consumes = "application/JSON")
-	public UserDto addUser(@RequestBody UserDto user) {
+	public UserDto addUser(@RequestBody UserDto user) throws ValidationException {
 		return userService.addUser(user.generateEntity(),user.getRoles());	
 	}
 	
