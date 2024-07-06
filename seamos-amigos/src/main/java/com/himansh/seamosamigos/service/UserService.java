@@ -60,7 +60,7 @@ public class UserService implements UserDetailsService{
 		if (StringUtil.isEmpty(user.getEmail())) {
 			throw new ValidationException("User email is mandatory.");
 		}
-		boolean isUserAlreadyExists = Optional.ofNullable(userRepository.findByEmail(user.getEmail())).isEmpty();
+		boolean isUserAlreadyExists = Optional.ofNullable(userRepository.findByEmail(user.getEmail())).isPresent();
 		if (isUserAlreadyExists) {
 			throw new ValidationException("User Already exists with same email.");
 		}
