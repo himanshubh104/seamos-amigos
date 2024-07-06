@@ -133,7 +133,7 @@ public class CommentWebModel implements Serializable{
 		comment.setLikes(likes);
 		if(photoId!=null && photoId!=0)
 			comment.setPhotoId(photoId);
-		comment.setTimeStamp(Calendar.getInstance().getTime());
+		comment.setTimestamp(Calendar.getInstance().getTime());
 		comment.setUserId(userId);
 		return comment;
 	}
@@ -148,7 +148,7 @@ public class CommentWebModel implements Serializable{
 		model.setPhotoId(entity.getPhotoId());
 		model.setUserId(entity.getUserId());
 		try {
-			model.setTimeStamp(util.dateToString(entity.getTimeStamp()));
+			model.setTimeStamp(util.dateToString(entity.getTimestamp()));
 		} catch (Exception e) {
 			model.setTimeStamp(null);
 		}
@@ -161,7 +161,7 @@ public class CommentWebModel implements Serializable{
 				model1.setPhotoId(entity.getPhotoId());
 				model1.setUserId(e.getUserId());
 				try {
-					model1.setTimeStamp(util.dateToString(e.getTimeStamp()));
+					model1.setTimeStamp(util.dateToString(e.getTimestamp()));
 				} catch (Exception exc) {
 					model1.setTimeStamp(null);
 				}

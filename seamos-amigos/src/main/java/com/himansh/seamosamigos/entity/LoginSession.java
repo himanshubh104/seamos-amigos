@@ -2,24 +2,26 @@ package com.himansh.seamosamigos.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "login_session")
 public class LoginSession {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "login_id")
 	private long loginId;
+
+	@Column(name = "user_id")
 	private int userId;
+
+	@Column(name = "user_ip")
 	private String userIp;
+
+	@Column(name = "user_agent")
 	private String userAgent;
 	@Temporal(value = TemporalType.TIMESTAMP)
+	@Column(name = "login_time")
 	private Date loginTime = new Date();
 	
 	public long getLoginId() {

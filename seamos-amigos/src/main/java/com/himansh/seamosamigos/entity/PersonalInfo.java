@@ -2,24 +2,24 @@ package com.himansh.seamosamigos.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "personalInfo")
 public class PersonalInfo {
 	@Id
+	@Column(name = "user_id")
 	private int userId;
 	private String gender;
+	@Column(name = "date_of_birth")
 	private Date dateOfBirth;
+	@Column(name = "phone_umber")
 	private String phoneNumber;
+	@Column(name = "personal_email")
 	private String personalEmail;
 	private String bio;
 	@OneToOne
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	public int getUserId() {
