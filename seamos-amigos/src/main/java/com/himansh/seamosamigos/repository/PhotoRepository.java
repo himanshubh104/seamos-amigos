@@ -16,16 +16,19 @@ public interface PhotoRepository extends PagingAndSortingRepository<Photo, Integ
 	@Query("from Photo p join p.users u where u.userId=:userId")
 	public List<Photo> getAllProfilePhotos(@Param("userId") int userId);
 
-	@Query("select distinct p from Photo p join p.users u join connections c on u.userId = c.user2.userId " +
-			"where c.user1.userId=:userId or u.userId = :userId order by p.dateOfUpload desc")
+	@Query("select distinct p from Photo p join p.users u " +
+			"join connections c on (u.userId = c.user1.userId or u.userId = :userId) " +
+			"where c.user2.userId = :userId order by p.dateOfUpload desc")
 	Stream<Photo> getAllPhotos(@Param("userId") int userId, Pageable pageable);
 
-	@Query("select distinct p from Photo p join p.users u join connections c on u.userId = c.user2.userId " +
-			"where (c.user1.userId=:userId or u.userId = :userId) and p.dateOfUpload < :timestamp order by p.dateOfUpload desc")
+	@Query("select distinct p from Photo p join p.users u " +
+			"join connections c on (u.userId = c.user1.userId or u.userId = :userId) " +
+			"where c.user2.userId=:userId and p.dateOfUpload < :timestamp order by p.dateOfUpload desc")
 	Stream<Photo> getAllPhotosByTimestamp(@Param("userId") int userId, @Param("timestamp") Date timestamp, Pageable pageable);
 
-	@Query("select distinct p from Photo p join p.users u join connections c on u.userId = c.user2.userId " +
-			"where (c.user1.userId=:userId or u.userId = :userId) and p.photoId < :picId order by p.dateOfUpload desc")
+	@Query("select distinct p from Photo p join p.users u " +
+			"join connections c on (u.userId = c.user1.userId or u.userId = :userId) " +
+			"where c.user2.userId=:userId and p.photoId < :picId order by p.dateOfUpload desc")
 	Stream<Photo> getAllPhotosByPhotoId(@Param("userId") int userId, @Param("picId") Integer picId, Pageable pageable);
 	
 	@Query("select max(p.photoId) from Photo p")
