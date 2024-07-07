@@ -20,30 +20,31 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SeamosAmigosApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SeamosAmigosApplication.class, args);
-	}
-	
-	private ApiKey apiKey() { 
-	    return new ApiKey("JWT", "Authorization", "header"); 
-	}
-	
-	private SecurityContext securityContext() { 
-	    return SecurityContext.builder().securityReferences(defaultAuth()).build(); 
-	} 
-	
-	private List<SecurityReference> defaultAuth() { 
-	    AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything"); 
-	    AuthorizationScope[] authorizationScopes = new AuthorizationScope[1]; 
-	    authorizationScopes[0] = authorizationScope; 
-	    return Arrays.asList(new SecurityReference("JWT", authorizationScopes)); 
-	}
-	@Bean
-	public Docket productApi() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.securityContexts(Arrays.asList(securityContext()))
-			    .securitySchemes(Arrays.asList(apiKey()))
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.himansh.seamosamigos")).build();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SeamosAmigosApplication.class, args);
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("JWT", "Authorization", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+    }
+
+    @Bean
+    public Docket productApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.himansh.seamosamigos")).build();
+    }
 }
