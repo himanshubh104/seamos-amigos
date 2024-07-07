@@ -54,8 +54,11 @@ public class UserService implements UserDetailsService{
 	private List<Roles> getUserRoles(List<String> roles){
 		return roleRepository.findAllByRoleNames(roles);
 	}
-	
-	//Register User
+
+	/**
+	 * Register User
+	 */
+	@Transactional
 	public UserDto addUser(User user, List<String> roles) throws ValidationException {
 		if (StringUtil.isEmpty(user.getEmail())) {
 			throw new ValidationException("User email is mandatory.");
@@ -109,7 +112,8 @@ public class UserService implements UserDetailsService{
 		loginSessionRepo.deleteByUserIp(clientIp);
 		return true;
 	}
-	
+
+	@Transactional
 	public boolean logoutUser(String clientIp) {
 		User user = userRepository.getOne(CurrentUser.getCurrentUserId());
 		int activeSessions = user.getActiveSessions();
@@ -143,7 +147,7 @@ public class UserService implements UserDetailsService{
 		return loginSessionRepo.countByLoginId(loginId);
 	}
 
-	@javax.transaction.Transactional
+	@Transactional
 	public long initUserLogin(UserPrincipal userPrincipal, String clientIp, String userAgent, String forceLoginClienIp) throws InAppException {
 		if (forceLoginClienIp != null) {
 			forceLogout(userPrincipal.getUserId(), forceLoginClienIp);

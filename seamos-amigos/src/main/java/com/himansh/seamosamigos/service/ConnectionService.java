@@ -9,7 +9,7 @@ import com.himansh.seamosamigos.repository.ConnectionRepository;
 import com.himansh.seamosamigos.repository.RequestsRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,8 +43,12 @@ public class ConnectionService {
 			return UserDto.generateDto(u);
 		}).collect(Collectors.toList());
 	}
-	
-	//Method for Follow Requests
+
+	/**
+	 * Respond to follow Requests
+	 * response- A: Accept, R: Reject
+	 */
+	@Transactional
 	 public boolean acceptOrRejectRequest(int userId, int requestId,char response) throws InAppException {
 		 User ue=getUserById(userId);
 		 FollowRequests request=null;
@@ -72,7 +76,8 @@ public class ConnectionService {
 			return false;
 		}	 
 	 }
-	 
+
+	 @Transactional
 	 public FollowRequests createRequest(String requestedUserEmail, int requestingUser) throws InAppException {
 		 User reqUser = userRepository.findByEmail(requestedUserEmail);
 		 if (reqUser == null) 
@@ -91,7 +96,6 @@ public class ConnectionService {
 		 return reqRepository.saveAndFlush(request);
 	 }
 	 
-	@GetMapping(path="users/request")
 	public List<FollowRequests> getAllRequests(int requestedUser){
 		return reqRepository.getAllRequests(requestedUser);
 	}
