@@ -16,42 +16,44 @@ import java.util.stream.Collectors;
 @RequestMapping("api/seamos-amigos/")
 public class ConnectionsController {
 
-	private final ConnectionService connectionService;
-	private int userId=-1;
+    private final ConnectionService connectionService;
+    private int userId = -1;
 
-	public ConnectionsController(ConnectionService connectionService) {
-		this.connectionService = connectionService;
-	}
-
-	@ModelAttribute
-    public void fetchUser() {
-    	userId = CurrentUser.getCurrentUserId();
+    public ConnectionsController(ConnectionService connectionService) {
+        this.connectionService = connectionService;
     }
-    
-	@GetMapping(path = "connections/followers")
-	public List<UserDto> getUserFollowers(){
-		return connectionService.getUserFollowers(userId);		
-	}
-	@GetMapping(path = "connections/followings")
-	public List<UserDto> getUserFollowings(){
-		return connectionService.getUserFolloiwngs(userId);		
-	}
-	
-	@GetMapping(path="connections/request/respond")
-	public boolean acceptOrRejectRequest(@RequestParam(name = "requestId") int requestId,
-			@RequestParam(name = "response") char response) throws InAppException {
-		return connectionService.acceptOrRejectRequest(userId, requestId, response);
-	}
-	@GetMapping(path="connections/request")
-	public ResponseEntity<Object> getAllRequests(){
-		return ResponseEntity.ok(connectionService.getAllRequests(userId).stream()
-				.map(RequestDto::genrateDto).collect(Collectors.toList()));
-	}
-	
-	@GetMapping(path="connections/request/create")
-	 public FollowRequests createRequest(@RequestParam(name = "requestedUser") String requestedUser)
-			 throws InAppException {
-		int requestingUser=userId;
-		return connectionService.createRequest(requestedUser, requestingUser);
-	 }
+
+    @ModelAttribute
+    public void fetchUser() {
+        userId = CurrentUser.getCurrentUserId();
+    }
+
+    @GetMapping(path = "connections/followers")
+    public List<UserDto> getUserFollowers() {
+        return connectionService.getUserFollowers(userId);
+    }
+
+    @GetMapping(path = "connections/followings")
+    public List<UserDto> getUserFollowings() {
+        return connectionService.getUserFolloiwngs(userId);
+    }
+
+    @GetMapping(path = "connections/request/respond")
+    public boolean acceptOrRejectRequest(@RequestParam(name = "requestId") int requestId,
+                                         @RequestParam(name = "response") char response) throws InAppException {
+        return connectionService.acceptOrRejectRequest(userId, requestId, response);
+    }
+
+    @GetMapping(path = "connections/request")
+    public ResponseEntity<Object> getAllRequests() {
+        return ResponseEntity.ok(connectionService.getAllRequests(userId).stream()
+                .map(RequestDto::genrateDto).collect(Collectors.toList()));
+    }
+
+    @GetMapping(path = "connections/request/create")
+    public FollowRequests createRequest(@RequestParam(name = "requestedUser") String requestedUser)
+            throws InAppException {
+        int requestingUser = userId;
+        return connectionService.createRequest(requestedUser, requestingUser);
+    }
 }

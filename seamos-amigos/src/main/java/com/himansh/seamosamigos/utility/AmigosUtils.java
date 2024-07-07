@@ -17,48 +17,48 @@ import eu.bitwalker.useragentutils.UserAgent;
 
 @Component
 public class AmigosUtils {
-	
-	//private final String UPLOADED_FOLDER= "C:\\Users\\Himansh\\Documents\\GIT_Repo\\seamos-amigos\\stored-images\\";
-	
-	public Date stringToDate(String strDate)throws Exception{
-		Date date= new SimpleDateFormat("dd-MMM-yyyy").parse(strDate);
-		return date;
-	}
-	
-	public Date stringToDateTime(String strDate)throws Exception{
-		Date date= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(strDate);
-		return date;
-	}
-	
-	public String dateToString(Date date) {
-		String strDate= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(date);
-		return strDate;
-	}
-	
-	//Method to Save the Picture
-	public String saveUploadedFile(MultipartFile file,int userId, Integer lastPicId) throws Exception {
-	    if (!file.isEmpty()) {
-	        byte[] bytes = file.getBytes();
-	        Files.createDirectories(Paths.get(AmigosConstants.MEDIA_FOLDER));
-	        String fileType = file.getContentType();
-	        switch (fileType) {
-	        	case "image/jpeg": 
-	        		fileType = "JPEG";
-	        		break;
-	        	case "image/png":
-	        		fileType = "PNG";
-	        		break;
-				default:
-	        		throw new InAppException("File is not an image.");
-	        }
-	        Path path = Paths.get(AmigosConstants.MEDIA_FOLDER + "IMG"+(lastPicId+1)+"-"+userId+"."+fileType);
-	        return Files.write(path, bytes).toString();
-	    }
-	    return null;
-	}
-	
-	
-	public String extractClientIp(HttpServletRequest request) {
+
+    //private final String UPLOADED_FOLDER= "C:\\Users\\Himansh\\Documents\\GIT_Repo\\seamos-amigos\\stored-images\\";
+
+    public Date stringToDate(String strDate) throws Exception {
+        Date date = new SimpleDateFormat("dd-MMM-yyyy").parse(strDate);
+        return date;
+    }
+
+    public Date stringToDateTime(String strDate) throws Exception {
+        Date date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(strDate);
+        return date;
+    }
+
+    public String dateToString(Date date) {
+        String strDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(date);
+        return strDate;
+    }
+
+    //Method to Save the Picture
+    public String saveUploadedFile(MultipartFile file, int userId, Integer lastPicId) throws Exception {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Files.createDirectories(Paths.get(AmigosConstants.MEDIA_FOLDER));
+            String fileType = file.getContentType();
+            switch (fileType) {
+                case "image/jpeg":
+                    fileType = "JPEG";
+                    break;
+                case "image/png":
+                    fileType = "PNG";
+                    break;
+                default:
+                    throw new InAppException("File is not an image.");
+            }
+            Path path = Paths.get(AmigosConstants.MEDIA_FOLDER + "IMG" + (lastPicId + 1) + "-" + userId + "." + fileType);
+            return Files.write(path, bytes).toString();
+        }
+        return null;
+    }
+
+
+    public String extractClientIp(HttpServletRequest request) {
         String remoteAddr = "";
         if (request != null) {
             remoteAddr = request.getHeader("X-FORWARDED-FOR");
@@ -68,9 +68,9 @@ public class AmigosUtils {
         }
         return remoteAddr;
     }
-	
-	public String extractClientUserAgent(HttpServletRequest request) {
-		UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
-		return userAgent.getBrowser().getName()+" : "+userAgent.getOperatingSystem().getName();
-	}
+
+    public String extractClientUserAgent(HttpServletRequest request) {
+        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+        return userAgent.getBrowser().getName() + " : " + userAgent.getOperatingSystem().getName();
+    }
 }

@@ -22,62 +22,62 @@ import java.util.stream.Stream;
 
 @Service
 public class PhotoService {
-	private final UserRepository userRepository;
-	private final PhotoRepository photoRepository;
-	private final AmigosUtils utility;
+    private final UserRepository userRepository;
+    private final PhotoRepository photoRepository;
+    private final AmigosUtils utility;
 
-	public PhotoService(UserRepository userRepository, PhotoRepository photoRepository, AmigosUtils utility) {
-		this.userRepository = userRepository;
-		this.photoRepository = photoRepository;
-		this.utility = utility;
-	}
+    public PhotoService(UserRepository userRepository, PhotoRepository photoRepository, AmigosUtils utility) {
+        this.userRepository = userRepository;
+        this.photoRepository = photoRepository;
+        this.utility = utility;
+    }
 
-	public List<Photo> getUserPhotos(int userid){															// Get Profile photos
-		return photoRepository.getAllProfilePhotos(userid);
-	}
-	
-	@Transactional(readOnly = true)
-	public List<PhotoWebModel> getFeedsByPicId(int userid, int picId){										// Get photos in Feeds
-		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.toWebModels(photoRepository.getAllPhotosByPhotoId(userid, picId, pageable));
-	}
-	
-	@Transactional(readOnly = true)
-	public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
-		Pageable pageable= PageRequest.of(0, 10);
-		Stream<Photo> allPotos = photoRepository.getAllPhotos(userId, pageable);
-		return PhotoWebModel.toWebModels(allPotos);
-	}
-	
-	@Transactional(readOnly = true)
-	public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception{			// Get photos in Feeds.
-		Pageable pageable= PageRequest.of(0, 10);
-		return PhotoWebModel.toWebModels(
-				photoRepository.getAllPhotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));
-	}
+    public List<Photo> getUserPhotos(int userid) {                                                            // Get Profile photos
+        return photoRepository.getAllProfilePhotos(userid);
+    }
 
-	@Transactional
-	public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception{								// Upload a picture
-		Integer lastPicId = photoRepository.getMaxPhotoId();
-		lastPicId = lastPicId==null? 0 : lastPicId;
-		String uri=utility.saveUploadedFile(photo.getPicData(), userId, lastPicId);
-		if (uri!=null) {
-			Photo photoEntity=photo.generatePhotoEntity();
-			photoEntity.setUrl(uri);
-			photoEntity.setDateOfUpload(Calendar.getInstance().getTime());
-			photoEntity.setUsers(userRepository.getListOfUsers(new int[]{userId}));
-			return PhotoDto.generateDto(photoRepository.save(photoEntity));	
-		}
-		return photo;
-	}
-	
-	public byte[] getImage(String picPath) throws InAppException, IOException {
-		try {
-			var picInBytes = Files.readAllBytes(Paths.get(picPath));
-		    return picInBytes;
-		} catch(NoSuchFileException ex) {
-			throw new InAppException("File not found!");
-		}
-	}
+    @Transactional(readOnly = true)
+    public List<PhotoWebModel> getFeedsByPicId(int userid, int picId) {                                        // Get photos in Feeds
+        Pageable pageable = PageRequest.of(0, 10);
+        return PhotoWebModel.toWebModels(photoRepository.getAllPhotosByPhotoId(userid, picId, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public List<PhotoWebModel> getHomeScreenPhotos(int userId) {
+        Pageable pageable = PageRequest.of(0, 10);
+        Stream<Photo> allPotos = photoRepository.getAllPhotos(userId, pageable);
+        return PhotoWebModel.toWebModels(allPotos);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PhotoWebModel> getFeedsBytimestamp(int userid, String timestamp) throws Exception {            // Get photos in Feeds.
+        Pageable pageable = PageRequest.of(0, 10);
+        return PhotoWebModel.toWebModels(
+                photoRepository.getAllPhotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));
+    }
+
+    @Transactional
+    public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception {                                // Upload a picture
+        Integer lastPicId = photoRepository.getMaxPhotoId();
+        lastPicId = lastPicId == null ? 0 : lastPicId;
+        String uri = utility.saveUploadedFile(photo.getPicData(), userId, lastPicId);
+        if (uri != null) {
+            Photo photoEntity = photo.generatePhotoEntity();
+            photoEntity.setUrl(uri);
+            photoEntity.setDateOfUpload(Calendar.getInstance().getTime());
+            photoEntity.setUsers(userRepository.getListOfUsers(new int[]{userId}));
+            return PhotoDto.generateDto(photoRepository.save(photoEntity));
+        }
+        return photo;
+    }
+
+    public byte[] getImage(String picPath) throws InAppException, IOException {
+        try {
+            var picInBytes = Files.readAllBytes(Paths.get(picPath));
+            return picInBytes;
+        } catch (NoSuchFileException ex) {
+            throw new InAppException("File not found!");
+        }
+    }
 
 }
