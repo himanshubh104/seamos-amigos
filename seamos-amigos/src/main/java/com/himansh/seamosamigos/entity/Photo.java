@@ -45,5 +45,6 @@ public class Photo {
 	private List<User> users;
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "photo_id")
 	private Set<Comment> comments;
 }
