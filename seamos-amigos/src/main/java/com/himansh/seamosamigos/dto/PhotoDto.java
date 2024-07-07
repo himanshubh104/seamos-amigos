@@ -1,48 +1,21 @@
 package com.himansh.seamosamigos.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.himansh.seamosamigos.entity.Photo;
 
+@Setter
+@Getter
 public class PhotoDto {
 	private int photoId;
 	private String url;
+	@JsonIgnore
 	private MultipartFile picData;
 	private String caption;
 	private int userId;
-	
-	@JsonIgnore
-	public MultipartFile getPicData() {
-		return picData;
-	}
-	public void setPicData(MultipartFile picData) {
-		this.picData = picData;
-	}
-	public int getPhotoId() {
-		return photoId;
-	}
-	public void setPhotoId(int photoId) {
-		this.photoId = photoId;
-	}
-	public String getUrl() {
-		return url;
-	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getCaption() {
-		return caption;
-	}
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
 	
 	public Photo generatePhotoEntity() {
 		Photo photo =new Photo();
