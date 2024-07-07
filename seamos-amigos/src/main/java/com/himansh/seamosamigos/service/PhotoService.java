@@ -55,7 +55,8 @@ public class PhotoService {
 		return PhotoWebModel.toWebModels(
 				photoRepository.getAllPhotosByTimestamp(userid, utility.stringToDateTime(timestamp), pageable));
 	}
-	
+
+	@Transactional
 	public PhotoDto addUserPhoto(PhotoDto photo, int userId) throws Exception{								// Upload a picture
 		Integer lastPicId = photoRepository.getMaxPhotoId();
 		lastPicId = lastPicId==null? 0 : lastPicId;

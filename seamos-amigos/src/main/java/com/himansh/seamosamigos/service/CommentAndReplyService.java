@@ -32,7 +32,8 @@ public class CommentAndReplyService {
 		//c.setLikes(likesForComment.get(c.getCommentId()));
 		return comments.stream().map(CommentWebModel::toWebModel).collect(Collectors.toList());
 	}
-	
+
+	@Transactional
 	public CommentWebModel saveComment(CommentWebModel commentWebModel, int userId) {
 		commentWebModel.setUserId(userId);
 		if (commentWebModel.getCommentId()!=null && commentWebModel.getCommentId()!=0) {
@@ -50,7 +51,8 @@ public class CommentAndReplyService {
 		Comment comment= commentRepository.saveAndFlush(commentWebModel.toEntity());
 		return CommentWebModel.toWebModel(comment);
 	}
-	
+
+	@Transactional
 	public Integer deleteComment(Integer commentId, Integer userId) {
 		Optional<Comment> comment= commentRepository.findById(commentId);
 		if(comment.isPresent()) {
@@ -73,6 +75,7 @@ public class CommentAndReplyService {
 		return 0;
 	}
 
+	@Transactional
 	public Object updateComment(CommentWebModel commentWebModel, Integer userId) throws InAppException {
 		Integer commentId= commentWebModel.getCommentId();
 		Optional<Comment> comment= commentRepository.findById(commentId);
