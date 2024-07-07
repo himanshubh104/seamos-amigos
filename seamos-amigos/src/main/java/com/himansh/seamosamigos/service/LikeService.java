@@ -32,21 +32,21 @@ public class LikeService {
     @Transactional
     public Integer addLike(Integer feedId, Integer userId, String feedType) throws UserException {
         Integer isLiked = likeRepository.isLikedAlready(feedId, userId);
-        if (isLiked>0) {
+        if (isLiked > 0) {
             log.info("User has already liked the feed: {}", feedId);
             throw new UserException("User has already liked the same post.");
         }
         int totalLikes = 0;
         switch (feedType) {
             case IMAGE:
-                Photo photo = photoRepository.findById(feedId).orElseThrow(()->new UserException("Image not found"));
-                totalLikes = photo.getLikes()+1;
+                Photo photo = photoRepository.findById(feedId).orElseThrow(() -> new UserException("Image not found"));
+                totalLikes = photo.getLikes() + 1;
                 photo.setLikes(totalLikes);
                 photoRepository.save(photo);
                 break;
             case COMMENT:
-                Comment comment = commentRepository.findById(feedId).orElseThrow(()->new UserException("Comment not found"));
-                totalLikes = comment.getLikes()+1;
+                Comment comment = commentRepository.findById(feedId).orElseThrow(() -> new UserException("Comment not found"));
+                totalLikes = comment.getLikes() + 1;
                 comment.setLikes(totalLikes);
                 commentRepository.save(comment);
                 break;
@@ -73,13 +73,13 @@ public class LikeService {
         switch (feedType) {
             case IMAGE:
                 Photo photo = photoRepository.findById(feedId).orElseGet(Photo::new);
-                totalLikes = photo.getLikes()-1;
+                totalLikes = photo.getLikes() - 1;
                 photo.setLikes(totalLikes);
                 photoRepository.save(photo);
                 break;
             case COMMENT:
                 Comment comment = commentRepository.findById(feedId).orElseGet(Comment::new);
-                totalLikes = comment.getLikes()-1;
+                totalLikes = comment.getLikes() - 1;
                 comment.setLikes(totalLikes);
                 commentRepository.save(comment);
                 break;
@@ -92,6 +92,6 @@ public class LikeService {
 
     public Boolean haveUserLiked(Integer feedId, Integer userId) {
         Integer isLiked = likeRepository.isLikedAlready(feedId, userId);
-        return isLiked>0;
+        return isLiked > 0;
     }
 }
