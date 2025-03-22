@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter{
+public class JwtRequestFilter extends OncePerRequestFilter {
 	private final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
-    private final UserService userDetailsService;
-    private final JwtUtility jwtUtil;
+	private final UserService userDetailsService;
+	private final JwtUtility jwtUtil;
 	private final AmigosUtils utilities;
 
 	public JwtRequestFilter(UserService userDetailsService, JwtUtility jwtUtil, AmigosUtils utilities) {
@@ -36,49 +36,59 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-        String username = null;
-        long loginId = 0;
-        String jwt = null;
-        String errMessage = "";
-        
-        final String authorizationHeader = request.getHeader("Authorization");
-        try {
-	        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-	        	log.info("Validating JWT token.");
-	            jwt = authorizationHeader.substring(7);
-	            username = jwtUtil.extractUsername(jwt);
-	            loginId = jwtUtil.extractClaim(jwt, t->t.get("loginId", Long.class));
-	        }
-	        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-	        	UserPrincipal userDetails=(UserPrincipal) userDetailsService.loadUserByUsername(username);
-	        	int loginCounts = userDetailsService.getLoginDetails(loginId);
-	        	
-	        	if (loginCounts == 0) {
-	        		errMessage = AmigosConstants.INVALID_TOKEN+": No active session found!";
-	        	}
-	        	else {
-		        	CurrentUser.setCurrentUserId(userDetails.getUserId());					// Setting current logged in user.
-		        	
-		        	if(jwtUtil.validateToken(jwt, userDetails, utilities.extractClientIp(request))) {
-		        		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-		                        userDetails, null, userDetails.getAuthorities());
-		                usernamePasswordAuthenticationToken
-		                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-		                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-		        	}
-		        	else errMessage = AmigosConstants.INVALID_TOKEN;
-	        	}
-	        }
-        } catch (JwtException e) {
-			errMessage = AmigosConstants.INVALID_TOKEN+": "+e.getMessage();
+		String errMessage = "";
+		try {
+			String jwt = extractJwtFromRequest(request);
+			if (jwt != null) {
+				String username = jwtUtil.extractUsername(jwt);
+				long loginId = jwtUtil.extractClaim(jwt, t -> t.get("loginId", Long.class));
+				errMessage = processAuthentication(request, username, loginId, jwt);
+			}
+			if (!errMessage.isEmpty()) {
+				log.error(errMessage);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write(errMessage);
+			}
+			filterChain.doFilter(request, response);
+		} finally {
+			CurrentUser.clear();
 		}
-        if (!errMessage.isEmpty()) {
-        	log.error(errMessage);
-        	response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        	response.getWriter().write(errMessage);
-        }
-        else
-        	filterChain.doFilter(request, response);		
 	}
 
+	private String extractJwtFromRequest(HttpServletRequest request) {
+		final String authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			log.info("Extracting JWT token.");
+			return authorizationHeader.substring(7);
+		}
+		return null;
+	}
+
+	private String processAuthentication(HttpServletRequest request, String username, long loginId, String jwt) {
+		log.info("Validating JWT token.");
+		String errMessage = "";
+		try {
+			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserPrincipal userDetails = (UserPrincipal) userDetailsService.loadUserByUsername(username);
+				CurrentUser.setCurrentUserId(userDetails.getUserId()); 		// Setting current logged in user.
+				int loginCounts = userDetailsService.getLoginDetails(loginId);
+				if (loginCounts == 0) {
+					errMessage = AmigosConstants.INVALID_TOKEN + ": No active session found!";
+				} else {
+					if (jwtUtil.validateToken(jwt, userDetails, utilities.extractClientIp(request))) {
+						UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+								userDetails, null, userDetails.getAuthorities());
+						usernamePasswordAuthenticationToken
+								.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+					} else {
+						errMessage = AmigosConstants.INVALID_TOKEN;
+					}
+				}
+			}
+		} catch (JwtException e) {
+			errMessage = AmigosConstants.INVALID_TOKEN + ": " + e.getMessage();
+		}
+		return errMessage;
+	}
 }
