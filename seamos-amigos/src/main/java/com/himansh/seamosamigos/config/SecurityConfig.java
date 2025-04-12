@@ -36,17 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
-		// TODO Auto-generated method stub
 		return super.authenticationManager();
 	}
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		// TODO Auto-generated method stub
-		web.ignoring().antMatchers("/v2/api-docs",
-				"/configuration/ui",
-				"/swagger-resources/**",
-				"/configuration/**",
+		web.ignoring().antMatchers(
+				"/v3/api-docs/**",
+				"/swagger-ui/**",
 				"/swagger-ui.html",
 				"/webjars/**",
 				"/api/seamos-amigos/users/register/**",
@@ -57,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
 		http.cors().and().csrf().disable()
 		.authorizeRequests()
 		.anyRequest().authenticated()

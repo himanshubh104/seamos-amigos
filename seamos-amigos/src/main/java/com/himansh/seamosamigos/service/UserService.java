@@ -12,7 +12,7 @@ import com.himansh.seamosamigos.repository.LoginSessionRepository;
 import com.himansh.seamosamigos.repository.PersonalInfoRepository;
 import com.himansh.seamosamigos.repository.RoleRepository;
 import com.himansh.seamosamigos.repository.UserRepository;
-import com.himansh.seamosamigos.Constants.AmigosConstants;
+import com.himansh.seamosamigos.constant.AmigosConstants;
 import com.himansh.seamosamigos.utility.AmigosUtils;
 import com.himansh.seamosamigos.utility.CurrentUser;
 import org.eclipse.jetty.util.StringUtil;

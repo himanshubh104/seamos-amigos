@@ -8,7 +8,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.himansh.seamosamigos.Constants.AmigosConstants;
+import com.himansh.seamosamigos.constant.AmigosConstants;
 import com.himansh.seamosamigos.exception.InAppException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
