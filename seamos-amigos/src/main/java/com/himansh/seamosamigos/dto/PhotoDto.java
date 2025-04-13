@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.himansh.seamosamigos.entity.Photo;
 
 @Setter
@@ -12,7 +11,6 @@ import com.himansh.seamosamigos.entity.Photo;
 public class PhotoDto {
 	private int photoId;
 	private String url;
-	@JsonIgnore
 	private MultipartFile picData;
 	private String caption;
 	private int userId;
