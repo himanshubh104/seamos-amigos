@@ -1,4 +1,4 @@
-package com.himansh.seamosamigos.Constants;
+package com.himansh.seamosamigos.constant;
 
 public class AmigosConstants {
 	public static final String SECRET_KEY = "Xhg675abcU00@$09L44LKOP*y$";
